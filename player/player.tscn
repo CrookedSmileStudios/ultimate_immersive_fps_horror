@@ -1,0 +1,91 @@
+[gd_scene load_steps=9 format=3 uid="uid://luy7w0qfph84"]
+
+[ext_resource type="Script" uid="uid://chmo46pkxaexp" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="Texture2D" uid="uid://dgh3ul6rjlkgi" path="res://assets/reticles/white_reticle.png" id="2_g1dw6"]
+[ext_resource type="PackedScene" uid="uid://bnvad8jy4rflu" path="res://interaction/interaction_controller.tscn" id="2_rkbax"]
+[ext_resource type="Texture2D" uid="uid://d1jemmogcuxvf" path="res://assets/reticles/tile_0155.png" id="3_qjkh3"]
+[ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kqu6x"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oul6g"]
+height = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
+radius = 3.0
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_oul6g")
+
+[node name="GUI" type="Node" parent="."]
+
+[node name="ReticleLayer" type="CanvasLayer" parent="GUI"]
+
+[node name="Control" type="Control" parent="GUI/ReticleLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DefaultReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_g1dw6")
+stretch_mode = 3
+
+[node name="HighlightReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_qjkh3")
+stretch_mode = 3
+
+[node name="InteractingReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_g6k8r")
+stretch_mode = 3
+
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_kqu6x")
+
+[node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_oul6g")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Eyes" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0795133, 0.38435, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head/Eyes"]
+unique_name_in_owner = true
+fov = 90.0
+
+[node name="InteractionRaycast" type="RayCast3D" parent="Head/Eyes/Camera3D"]
+unique_name_in_owner = true
+target_position = Vector3(0, 0, -2)
+
+[node name="Hand" type="Marker3D" parent="Head/Eyes/Camera3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="StandupCheck" type="RayCast3D" parent="."]
+target_position = Vector3(0, 2, 0)
+
+[node name="InteractionController" parent="." instance=ExtResource("2_rkbax")]
+unique_name_in_owner = true
+
+[node name="InteractableCheck" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableCheck"]
+shape = SubResource("SphereShape3D_qjkh3")

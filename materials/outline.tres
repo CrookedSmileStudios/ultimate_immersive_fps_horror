@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bb8qavkctskbx"]
+
+[ext_resource type="Shader" uid="uid://16odfo7vxua0" path="res://shaders/outline.gdshader" id="1_povrl"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_povrl")
+shader_parameter/outline_color = Color(0.139901, 0, 0.854185, 1)
+shader_parameter/outline_width = 2.0
+shader_parameter/pulse_speed = 1.0
+shader_parameter/min_alpha = 0.0
+shader_parameter/max_alpha = 1.0

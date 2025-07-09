@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://nv6su48cqvpq"]
+
+[ext_resource type="Texture2D" uid="uid://dxiueuuo4wuxf" path="res://assets/kenney_protoype_textures/PNG/Red/texture_01.png" id="1_3abmj"]
+[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="2_4wi47"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dnjkn"]
+albedo_texture = ExtResource("1_3abmj")
+
+[sub_resource type="BoxMesh" id="BoxMesh_gnhs0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6o44w"]
+
+[node name="Cube_5kg" type="RigidBody3D"]
+mass = 5.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_dnjkn")
+mesh = SubResource("BoxMesh_gnhs0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_6o44w")
+
+[node name="InteractionComponent" parent="." node_paths=PackedStringArray("object_ref") instance=ExtResource("2_4wi47")]
+object_ref = NodePath("..")
