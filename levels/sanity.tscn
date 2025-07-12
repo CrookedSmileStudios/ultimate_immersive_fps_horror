@@ -1,0 +1,127 @@
+[gd_scene load_steps=8 format=3 uid="uid://rx5fgdlb6d6l"]
+
+[ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_cmxv0"]
+[ext_resource type="PackedScene" uid="uid://bocfqnlvmtbs3" path="res://assets/streetlight/streetlight.tscn" id="2_c73gi"]
+[ext_resource type="PackedScene" uid="uid://luy7w0qfph84" path="res://player/player.tscn" id="2_crchu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_crchu"]
+sky_top_color = Color(0.192713, 0.165358, 0.166351, 1)
+sky_horizon_color = Color(0.215523, 0.173418, 0.16469, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0.215523, 0.173418, 0.16469, 1)
+
+[sub_resource type="Sky" id="Sky_c73gi"]
+sky_material = SubResource("ProceduralSkyMaterial_crchu")
+
+[sub_resource type="Environment" id="Environment_4m1x3"]
+background_mode = 2
+sky = SubResource("Sky_c73gi")
+glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.2
+volumetric_fog_albedo = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c73gi"]
+albedo_texture = ExtResource("1_cmxv0")
+uv1_triplanar = true
+
+[node name="Sanity" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_4m1x3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+light_energy = 0.0
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 0.0
+shadow_enabled = true
+sky_mode = 2
+
+[node name="Env" type="Node3D" parent="."]
+
+[node name="Floor" type="CSGBox3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+use_collision = true
+size = Vector3(30, 1, 30)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Wall1" type="CSGBox3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -14.5)
+use_collision = true
+size = Vector3(30, 6, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Wall2" type="CSGBox3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 14.5)
+use_collision = true
+size = Vector3(30, 6, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Wall3" type="CSGBox3D" parent="Env"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.5, 4, 0)
+use_collision = true
+size = Vector3(28, 6, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Wall4" type="CSGBox3D" parent="Env"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -14.5, 4, 0)
+use_collision = true
+size = Vector3(28, 6, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Post" type="CSGBox3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 3.5, 0)
+use_collision = true
+size = Vector3(1, 7, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Post2" type="CSGBox3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 3.5, 0)
+use_collision = true
+size = Vector3(1, 7, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Post3" type="CSGBox3D" parent="Env"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.18557e-07, 3.5, 5)
+use_collision = true
+size = Vector3(1, 7, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Post4" type="CSGBox3D" parent="Env"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.18557e-07, 3.5, -5)
+use_collision = true
+size = Vector3(1, 7, 1)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Ceiling" type="CSGBox3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+use_collision = true
+size = Vector3(12, 1, 12)
+material = SubResource("StandardMaterial3D_c73gi")
+
+[node name="Streetlight" parent="Env" instance=ExtResource("2_c73gi")]
+transform = Transform3D(-0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, -0.707107, -13.5, 1, 13.5)
+
+[node name="SpotLight3D" parent="Env/Streetlight" index="1"]
+light_color = Color(1, 0.574422, 0.480852, 1)
+light_energy = 15.0
+
+[node name="Streetlight2" parent="Env" instance=ExtResource("2_c73gi")]
+transform = Transform3D(-0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, -0.707107, 13.723, 1, 13.5071)
+
+[node name="Streetlight3" parent="Env" instance=ExtResource("2_c73gi")]
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 13.5, 1, -13.5)
+
+[node name="Streetlight4" parent="Env" instance=ExtResource("2_c73gi")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -13.5, 1, -13.5)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Env"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 6.86341, 0)
+light_energy = 16.0
+spot_range = 22.319
+
+[node name="Player" parent="." instance=ExtResource("2_crchu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[editable path="Env/Streetlight"]

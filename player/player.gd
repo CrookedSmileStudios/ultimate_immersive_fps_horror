@@ -49,6 +49,9 @@ var head_bobbing_current_intensity: float = 0.0
 var head_bobbing_vector: Vector2 = Vector2.ZERO
 var head_bobbing_index: float = 0.0
 
+# Sanity Vars
+var light_level: float = 0.0
+
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
@@ -138,7 +141,6 @@ func updatePlayerSpeed(_player_state: PlayerState) -> void:
 	elif _player_state == PlayerState.SPRINTING:
 		current_speed = sprinting_speed
 		
-	
 func updateCamera(delta: float) -> void:
 	if player_state == PlayerState.AIR:
 		pass
@@ -174,12 +176,9 @@ func updateCamera(delta: float) -> void:
 		eyes.position.x = lerp(eyes.position.x , 0.0 ,delta*lerp_speed)
 	
 func set_camera_locked(locked: bool) -> void:
+	
 	if locked:
 		current_sensitivity = 0.0
 		sensitivity_fading_in = false
 	else:
 		sensitivity_fading_in = true
-	
-	
-	
-	
