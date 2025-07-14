@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://luy7w0qfph84"]
+[gd_scene load_steps=22 format=3 uid="uid://luy7w0qfph84"]
 
 [ext_resource type="Script" uid="uid://chmo46pkxaexp" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Texture2D" uid="uid://dgh3ul6rjlkgi" path="res://assets/reticles/white_reticle.png" id="2_g1dw6"]
@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
 [ext_resource type="Texture2D" uid="uid://dq8fx86by642v" path="res://assets/kenney_protoype_textures/PNG/Green/texture_01.png" id="5_boad6"]
 [ext_resource type="PackedScene" uid="uid://c0bcshd6w44pb" path="res://player/sanity_controller.tscn" id="6_g6k8r"]
+[ext_resource type="Shader" uid="uid://b2n4xrtfumd1b" path="res://shaders/distortion.gdshader" id="8_hg6s5"]
+[ext_resource type="Texture2D" uid="uid://cgsxip30l0fhm" path="res://icon.svg" id="9_8t03j"]
+[ext_resource type="Shader" uid="uid://d3iqkkqtp5byv" path="res://shaders/puzzlecomplete.gdshader" id="10_8t03j"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kqu6x"]
 
@@ -28,50 +31,33 @@ rings = 1
 [sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
 radius = 3.0
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hg6s5"]
+frequency = 0.0125
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8t03j"]
+noise = SubResource("FastNoiseLite_hg6s5")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2ieo8"]
+noise_type = 2
+frequency = 0.0416
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ebec5"]
+noise = SubResource("FastNoiseLite_2ieo8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ieo8"]
+shader = ExtResource("8_hg6s5")
+shader_parameter/noise_tex1 = SubResource("NoiseTexture2D_8t03j")
+shader_parameter/noise_tex2 = SubResource("NoiseTexture2D_ebec5")
+shader_parameter/offset1 = Vector2(0.1, 0.1)
+shader_parameter/offset2 = Vector2(0.2, 0.2)
+shader_parameter/distortion_strength = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ebec5"]
+shader = ExtResource("10_8t03j")
+shader_parameter/alpha = 0.0
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_oul6g")
-
-[node name="GUI" type="Node" parent="."]
-
-[node name="ReticleLayer" type="CanvasLayer" parent="GUI"]
-
-[node name="Control" type="Control" parent="GUI/ReticleLayer"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="DefaultReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("2_g1dw6")
-stretch_mode = 3
-
-[node name="HighlightReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("3_qjkh3")
-stretch_mode = 3
-
-[node name="InteractingReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("4_g6k8r")
-stretch_mode = 3
-
-[node name="Debug" type="Label" parent="GUI/ReticleLayer/Control"]
-unique_name_in_owner = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
 
 [node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -130,6 +116,48 @@ visible = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableCheck"]
 shape = SubResource("SphereShape3D_qjkh3")
 
+[node name="GUI" type="Node" parent="."]
+
+[node name="ReticleLayer" type="CanvasLayer" parent="GUI"]
+
+[node name="Control" type="Control" parent="GUI/ReticleLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="DefaultReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_g1dw6")
+stretch_mode = 3
+
+[node name="HighlightReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_qjkh3")
+stretch_mode = 3
+
+[node name="InteractingReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_g6k8r")
+stretch_mode = 3
+
+[node name="Debug" type="Label" parent="GUI/ReticleLayer/Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
 [node name="InteractionController" parent="." instance=ExtResource("2_rkbax")]
 unique_name_in_owner = true
 
@@ -138,6 +166,7 @@ unique_name_in_owner = true
 
 [node name="SanityCamView" type="TextureRect" parent="SanityController"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(256, 256)
 anchors_preset = 3
 anchor_left = 1.0
@@ -151,6 +180,7 @@ grow_vertical = 0
 
 [node name="AverageLightColorView" type="ColorRect" parent="SanityController"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(256, 256)
 anchors_preset = 2
 anchor_top = 1.0
@@ -158,3 +188,17 @@ anchor_bottom = 1.0
 offset_top = -256.0
 offset_right = 256.0
 grow_vertical = 0
+
+[node name="Distortion" type="Sprite2D" parent="SanityController"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_2ieo8")
+position = Vector2(967.5, 539.5)
+scale = Vector2(15.3828, 8.72656)
+texture = ExtResource("9_8t03j")
+
+[node name="PuzzleComplete" type="Sprite2D" parent="SanityController"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_ebec5")
+position = Vector2(954.5, 540.5)
+scale = Vector2(15.9141, 9.44531)
+texture = ExtResource("9_8t03j")

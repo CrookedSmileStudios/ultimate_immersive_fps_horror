@@ -6,24 +6,45 @@ extends Node
 @onready var light_detection: Node3D = %LightDetection
 @onready var debug: Label = %Debug
 
+@onready var distortion: Sprite2D = %Distortion
+@onready var distortion_material: ShaderMaterial = distortion.material
+
+@onready var player_camera: Camera3D = %Camera3D
+
+@onready var flash_sprite: Sprite2D =  %PuzzleComplete
+@onready var shader_material: ShaderMaterial = flash_sprite.material as ShaderMaterial
+
+
 # Light Detection Variables
 var light_level: float = 0.0
 
 # Sanity Variables
 var sanity: float = 100.0
 var time_since_sanity_change: float = 0.0
-const SANITY_DRAIN_INTERVAL := .25 # seconds
-const DARKNESS_THRESHOLD := 0.3
-const SANITY_REGEN_TARGET := 51.0
-const SANITY_REGEN_RATE := 1.0 / SANITY_DRAIN_INTERVAL
+const SANITY_DRAIN_INTERVAL: float = .25 # seconds
+const DARKNESS_THRESHOLD: float = 0.3
+const SANITY_REGEN_TARGET: float = 51.0
+const SANITY_REGEN_RATE: float = 1.0 / SANITY_DRAIN_INTERVAL
+
+const ENEMY_VIEW_RANGE: float = 10.0
 
 func _ready() -> void:
 	light_detection_viewport.debug_draw = Viewport.DEBUG_DRAW_LIGHTING
 
 func _process(delta: float) -> void:
 	light_level = get_light_level()
-
 	update_sanity(delta)
+	update_distortion(sanity)
+	
+	for enemy in get_tree().get_nodes_in_group("enemy"):
+		if is_enemy_on_screen(enemy):
+			#print("on screen")
+			if is_enemy_in_view(enemy, ENEMY_VIEW_RANGE):
+				#print("in range")
+				drain_sanity(delta * 8.0)
+		#else:
+			#print("off screen")
+	
 	debug.text = "FPS: %d\nLight Level: %.2f\nSanity: %.2f\nState: %s" % [
 		Engine.get_frames_per_second(),
 		light_level,
@@ -89,3 +110,76 @@ func drain_sanity(amount: float) -> void:
 
 func add_sanity(amount: float) -> void:
 	sanity = clamp(sanity + amount, 0.0, 100.0)
+	
+func update_distortion(sanity: float):
+	var distortion := 0.0
+	if sanity < 50.0:
+		var t := (50.0 - sanity) / 50.0 # sanity 50 → t = 0, sanity 0 → t = 1
+		t = pow(t, 2.5) # curve: start slow, ends fast (t^2.5)
+		distortion = t * 0.05 # scale to max distortion
+	
+	distortion_material.set_shader_parameter("distortion_strength", distortion)
+	
+func is_enemy_in_view(enemy: Node3D, tolerance_degrees: float) -> bool:
+	var camera_pos: Vector3 = player_camera.global_transform.origin
+	var enemy_pos: Vector3 = enemy.global_transform.origin
+
+	# Vector pointing from the player camera to the enemy
+	var to_enemy: Vector3 = (enemy_pos - camera_pos).normalized()
+
+	# Camera's forward direction (in Godot, this is -Z)
+	var forward: Vector3 = -player_camera.global_transform.basis.z
+
+	# Compare the angle between the camera's view and the object
+	var angle_deg: float = rad_to_deg(acos(forward.dot(to_enemy)))
+
+	return angle_deg <= tolerance_degrees
+	
+func is_enemy_on_screen(enemy: Node3D) -> bool:
+	var viewport: Viewport = player_camera.get_viewport()
+	var screen_size: Vector2 = viewport.size
+
+	var enemy_position: Vector3 = enemy.global_transform.origin  				# World position of the enemy
+	var camera_position: Vector3 = player_camera.global_transform.origin		# World position of the player camera
+	var to_enemy: Vector3 = enemy_position - camera_position					# Directional vector from the camera to the object
+
+	var forward: Vector3 = -player_camera.global_transform.basis.z				# Get the camera's forward direction (negative Z axis in Godot)
+
+	# Check if the object is behind the camera by using dot product
+	# A negative dot product means the object is behind the view direction
+	if forward.dot(to_enemy) < 0.0:
+		return false
+
+	# Project the 3D object’s position to 2D screen space (Vector2)
+	var screen_pos: Vector2 = player_camera.unproject_position(enemy_position)
+
+	# If the screen X position is outside the screen bounds, return false
+	if screen_pos.x < 0.0 or screen_pos.x > screen_size.x:
+		return false
+	# If the screen Y position is outside the screen bounds, return false
+	if screen_pos.y < 0.0 or screen_pos.y > screen_size.y:
+		return false
+
+	return true
+
+func on_puzzle_complete(flash_duration: float = 0.1, fade_duration: float = 0.5) -> void:
+	# Immediately set alpha to full (visible)
+	shader_material.set_shader_parameter("alpha", 0.5)
+	
+	# Create a tween sequence
+	var tween = get_tree().create_tween()
+	
+	# Wait for the flash_duration at full alpha (hold)
+	tween.tween_interval(flash_duration)
+	
+	# Then tween alpha back to 0 over fade_duration
+	tween.tween_property(shader_material, "shader_parameter/alpha", 0.0, fade_duration)
+	
+	# Optional callback at the end of fade to reset/hide
+	tween.tween_callback(Callable(self, "_on_flash_complete"))
+
+func _on_flash_complete() -> void:
+	# Reset or hide flash sprite if needed
+	# For example, make sure alpha is zero and node hidden
+	shader_material.set_shader_parameter("alpha", 0.0)
+	# flash_sprite.visible = false  # Uncomment if you want to hide it
