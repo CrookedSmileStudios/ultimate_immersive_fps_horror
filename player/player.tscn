@@ -1,28 +1,22 @@
-[gd_scene load_steps=22 format=3 uid="uid://luy7w0qfph84"]
+[gd_scene load_steps=12 format=3 uid="uid://luy7w0qfph84"]
 
 [ext_resource type="Script" uid="uid://chmo46pkxaexp" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Texture2D" uid="uid://dgh3ul6rjlkgi" path="res://assets/reticles/white_reticle.png" id="2_g1dw6"]
 [ext_resource type="PackedScene" uid="uid://bnvad8jy4rflu" path="res://interaction/interaction_controller.tscn" id="2_rkbax"]
 [ext_resource type="Texture2D" uid="uid://d1jemmogcuxvf" path="res://assets/reticles/tile_0155.png" id="3_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
-[ext_resource type="Texture2D" uid="uid://dq8fx86by642v" path="res://assets/kenney_protoype_textures/PNG/Green/texture_01.png" id="5_boad6"]
 [ext_resource type="PackedScene" uid="uid://c0bcshd6w44pb" path="res://player/sanity_controller.tscn" id="6_g6k8r"]
-[ext_resource type="Shader" uid="uid://b2n4xrtfumd1b" path="res://shaders/distortion.gdshader" id="8_hg6s5"]
-[ext_resource type="Texture2D" uid="uid://cgsxip30l0fhm" path="res://icon.svg" id="9_8t03j"]
-[ext_resource type="Shader" uid="uid://d3iqkkqtp5byv" path="res://shaders/puzzlecomplete.gdshader" id="10_8t03j"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kqu6x"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oul6g"]
 height = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6k8r"]
-cull_mode = 2
-albedo_texture = ExtResource("5_boad6")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hg6s5"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_g6k8r"]
 lightmap_size_hint = Vector2i(11, 6)
-material = SubResource("StandardMaterial3D_g6k8r")
+material = SubResource("StandardMaterial3D_hg6s5")
 radius = 0.3
 height = 0.6
 radial_segments = 4
@@ -30,31 +24,6 @@ rings = 1
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
 radius = 3.0
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_hg6s5"]
-frequency = 0.0125
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8t03j"]
-noise = SubResource("FastNoiseLite_hg6s5")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_2ieo8"]
-noise_type = 2
-frequency = 0.0416
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ebec5"]
-noise = SubResource("FastNoiseLite_2ieo8")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2ieo8"]
-shader = ExtResource("8_hg6s5")
-shader_parameter/noise_tex1 = SubResource("NoiseTexture2D_8t03j")
-shader_parameter/noise_tex2 = SubResource("NoiseTexture2D_ebec5")
-shader_parameter/offset1 = Vector2(0.1, 0.1)
-shader_parameter/offset2 = Vector2(0.2, 0.2)
-shader_parameter/distortion_strength = 0.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ebec5"]
-shader = ExtResource("10_8t03j")
-shader_parameter/alpha = 0.0
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_oul6g")
@@ -163,42 +132,3 @@ unique_name_in_owner = true
 
 [node name="SanityController" parent="." instance=ExtResource("6_g6k8r")]
 unique_name_in_owner = true
-
-[node name="SanityCamView" type="TextureRect" parent="SanityController"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(256, 256)
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -256.0
-offset_top = -256.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="AverageLightColorView" type="ColorRect" parent="SanityController"]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(256, 256)
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -256.0
-offset_right = 256.0
-grow_vertical = 0
-
-[node name="Distortion" type="Sprite2D" parent="SanityController"]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_2ieo8")
-position = Vector2(967.5, 539.5)
-scale = Vector2(15.3828, 8.72656)
-texture = ExtResource("9_8t03j")
-
-[node name="PuzzleComplete" type="Sprite2D" parent="SanityController"]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_ebec5")
-position = Vector2(954.5, 540.5)
-scale = Vector2(15.9141, 9.44531)
-texture = ExtResource("9_8t03j")

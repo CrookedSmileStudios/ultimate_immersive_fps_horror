@@ -163,6 +163,7 @@ func is_enemy_on_screen(enemy: Node3D) -> bool:
 	return true
 
 func on_puzzle_complete(flash_duration: float = 0.1, fade_duration: float = 0.5) -> void:
+	flash_sprite.visible = true
 	# Immediately set alpha to full (visible)
 	shader_material.set_shader_parameter("alpha", 0.5)
 	
@@ -182,4 +183,4 @@ func _on_flash_complete() -> void:
 	# Reset or hide flash sprite if needed
 	# For example, make sure alpha is zero and node hidden
 	shader_material.set_shader_parameter("alpha", 0.0)
-	# flash_sprite.visible = false  # Uncomment if you want to hide it
+	flash_sprite.visible = false

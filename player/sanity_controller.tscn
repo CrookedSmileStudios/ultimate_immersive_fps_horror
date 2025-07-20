@@ -1,6 +1,73 @@
-[gd_scene load_steps=2 format=3 uid="uid://c0bcshd6w44pb"]
+[gd_scene load_steps=11 format=3 uid="uid://c0bcshd6w44pb"]
 
 [ext_resource type="Script" uid="uid://des1jptc7jwy0" path="res://player/sanity_controller.gd" id="1_gcf08"]
+[ext_resource type="Shader" uid="uid://b2n4xrtfumd1b" path="res://shaders/distortion.gdshader" id="2_mmjw3"]
+[ext_resource type="Texture2D" uid="uid://cgsxip30l0fhm" path="res://icon.svg" id="3_a085o"]
+[ext_resource type="Shader" uid="uid://d3iqkkqtp5byv" path="res://shaders/puzzlecomplete.gdshader" id="4_e61y0"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_becph"]
+frequency = 0.0125
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8t03j"]
+noise = SubResource("FastNoiseLite_becph")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_17xeu"]
+noise_type = 2
+frequency = 0.0416
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ebec5"]
+noise = SubResource("FastNoiseLite_17xeu")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ca6cb"]
+shader = ExtResource("2_mmjw3")
+shader_parameter/noise_tex1 = SubResource("NoiseTexture2D_8t03j")
+shader_parameter/noise_tex2 = SubResource("NoiseTexture2D_ebec5")
+shader_parameter/offset1 = Vector2(0.1, 0.1)
+shader_parameter/offset2 = Vector2(0.2, 0.2)
+shader_parameter/distortion_strength = 0.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2powh"]
+shader = ExtResource("4_e61y0")
+shader_parameter/alpha = 0.0
 
 [node name="SanityController" type="Node"]
 script = ExtResource("1_gcf08")
+
+[node name="SanityCamView" type="TextureRect" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 256)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -256.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AverageLightColorView" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(256, 256)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -256.0
+offset_right = 256.0
+grow_vertical = 0
+
+[node name="Distortion" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_ca6cb")
+position = Vector2(967.5, 539.5)
+scale = Vector2(15.3828, 8.72656)
+texture = ExtResource("3_a085o")
+
+[node name="PuzzleComplete" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_2powh")
+position = Vector2(954.5, 540.5)
+scale = Vector2(15.9141, 9.44531)
+texture = ExtResource("3_a085o")
