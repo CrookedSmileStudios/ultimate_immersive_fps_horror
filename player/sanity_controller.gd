@@ -38,12 +38,9 @@ func _process(delta: float) -> void:
 	
 	for enemy in get_tree().get_nodes_in_group("enemy"):
 		if is_enemy_on_screen(enemy):
-			#print("on screen")
 			if is_enemy_in_view(enemy, ENEMY_VIEW_RANGE):
-				#print("in range")
-				drain_sanity(delta * 8.0)
-		#else:
-			#print("off screen")
+				if has_line_of_sight_to(enemy):
+					drain_sanity(delta * 8.0)
 	
 	debug.text = "FPS: %d\nLight Level: %.2f\nSanity: %.2f\nState: %s" % [
 		Engine.get_frames_per_second(),
@@ -161,6 +158,35 @@ func is_enemy_on_screen(enemy: Node3D) -> bool:
 		return false
 
 	return true
+	
+func has_line_of_sight_to(enemy: Node3D) -> bool:
+	# direct_space_state gives access to physics queries, such as raycasts and collision checks
+	var space_state = player_camera.get_world_3d().direct_space_state
+	
+	# the world-space position of the player camera.
+	var from_pos = player_camera.global_transform.origin
+	
+	# the world-space position of the enemy.
+	var to_pos = enemy.global_transform.origin
+	
+	# creates a raycast, the size of the raycast starts at the from_pos (player camera) and ends at the enemy 
+	var query = PhysicsRayQueryParameters3D.create(from_pos, to_pos)
+	
+	# determines what the ray can hit. Our enemy is on collision_mask 1, as well as our walls.
+	# if you are making use of multiple layers, you will need to modify this value.
+	query.collision_mask = 1
+	
+	# Ignore the player camera and the enemy, we only care if we collide with walls/objects
+	query.exclude = [player_camera, enemy]
+	
+	# Return the results of everything the raycast is colliding with.
+	var result = space_state.intersect_ray(query)
+	
+	# If the raycast is colliding with nothing, then we have a clear line of sight to the enemy (true)
+	# If the raycast is being blocked by a wall, then result is not empty (False)
+	return result.is_empty()
+
+
 
 func on_puzzle_complete(flash_duration: float = 0.1, fade_duration: float = 0.5) -> void:
 	flash_sprite.visible = true
