@@ -7,7 +7,8 @@ enum InteractionType {
 	DOOR,
 	SWITCH,
 	WHEEL,
-	ITEM
+	ITEM,
+	NOTE
 }
 
 @export var object_ref: Node3D
@@ -15,6 +16,7 @@ enum InteractionType {
 @export var maximum_rotation: float = 90
 @export var pivot_point: Node3D
 @export var nodes_to_affect: Array[Node]
+@export var content: String
 
 # Common Variables
 var can_interact: bool = true
@@ -44,6 +46,7 @@ var is_switch_snapping: bool = false
 
 # Signals
 signal item_collected(item: Node)
+signal note_collected(note: Node3D)
 
 func _ready() -> void:
 	match interaction_type:
@@ -57,6 +60,8 @@ func _ready() -> void:
 			starting_rotation = object_ref.rotation.z
 			maximum_rotation = deg_to_rad(rad_to_deg(starting_rotation)+maximum_rotation)
 			camera = get_tree().get_current_scene().find_child("Camera3D", true, false)
+		InteractionType.NOTE:
+			content = content.replace("\\n", "\n")
 	
 ## Runs once, when the player FIRST clicks on an object to interact with
 func preInteract(hand: Marker3D) -> void:
@@ -84,6 +89,8 @@ func interact() -> void:
 			_default_interact()
 		InteractionType.ITEM:
 			_collect_item()
+		InteractionType.NOTE:
+			_collect_note()
 
 ## Alternate interaction using secondary button
 func auxInteract() -> void:
@@ -241,3 +248,7 @@ func calculate_cross_product(_mouse_position: Vector2) -> float:
 func _collect_item() -> void:
 	emit_signal("item_collected", get_parent())
 	get_parent().queue_free()
+	
+## Fires a signal that a player has picked up a note/log
+func _collect_note() -> void:
+	emit_signal("note_collected", get_parent())

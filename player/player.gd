@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
-@onready var head: Node3D = $Head
-@onready var eyes: Node3D = $Head/Eyes
-@onready var camera_3d: Camera3D = $Head/Eyes/Camera3D
+@onready var head: Node3D = %Head
+@onready var eyes: Node3D = %Eyes
+@onready var camera_3d: Camera3D = %Camera3D
 @onready var standing_collision_shape: CollisionShape3D = $StandingCollisionShape
 @onready var crouching_collision_shape: CollisionShape3D = $CrouchingCollisionShape
 @onready var standup_check: RayCast3D = $StandupCheck

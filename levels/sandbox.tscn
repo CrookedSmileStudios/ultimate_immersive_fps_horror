@@ -244,7 +244,7 @@ shape = SubResource("BoxShape3D_7wgt2")
 object_ref = NodePath("..")
 interaction_type = 3
 maximum_rotation = 360.0
-nodes_to_affect = [NodePath("../../../PivotPoint"), NodePath("../../../Monkey"), NodePath("../../../Monkey2"), NodePath("../../../Monkey3")]
+nodes_to_affect = [NodePath("../../../PivotPoint"), null, null, null]
 
 [node name="PivotPoint" type="Node3D" parent="Podium_Wheel"]
 transform = Transform3D(1, -8.74228e-08, 8.74228e-08, 8.74228e-08, -4.37114e-08, -1, 8.74228e-08, 1, -4.37114e-08, 1, -1, -1)

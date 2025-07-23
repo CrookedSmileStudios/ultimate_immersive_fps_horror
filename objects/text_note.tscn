@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://bfxxin08cd2er"]
+
+[ext_resource type="Texture2D" uid="uid://gu5e6tomjfwi" path="res://assets/notes/DIARY.png" id="1_qlwxl"]
+[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="2_wwlmk"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e5cn3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beki5"]
+albedo_texture = ExtResource("1_qlwxl")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e4pb6"]
+size = Vector3(2.2, 0.3, 3)
+
+[node name="Text_Note" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.112, 0, 0, 0, 1.536, 0, 0, 0, 1.536, 0, 0, 0)
+layers = 2
+mesh = SubResource("PlaneMesh_e5cn3")
+surface_material_override/0 = SubResource("StandardMaterial3D_beki5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0168457, 0, -0.00854492)
+shape = SubResource("BoxShape3D_e4pb6")
+
+[node name="InteractionComponent" parent="." node_paths=PackedStringArray("object_ref") instance=ExtResource("2_wwlmk")]
+object_ref = NodePath("")
+interaction_type = 5
+content = "U.S. ARMY FIELD OPERATIONS REPORT\\nWHITLOW RELAY SECTOR – ALASKAN COMMAND\\n17 JANUARY 1953\\nTYPEWRITTEN – URGENT\\n\\nTO: COMMAND HQ, FT. RICHARDSON\\nFROM: LT. R. MERCER, ACTING FIELD COMMANDER\\nRE: SITUATION UPDATE – WHITLOW RELAY\\n\\nSir,\\n\\nThis is a field report on the ongoing situation at Whitlow Relay. Communications remain severely limited following the antenna damage sustained during the storm on the 14th. The ice shear fractured the primary mast, and we’ve only managed partial outbound contact using the backup SCR-399 unit. Signal strength is weak, and any attempts to reach Command beyond twelve miles have been unsuccessful.\\n\\nAs of this morning at 0430 hours, Private Henley has gone missing. There are no signs of forced entry or tracks beyond the perimeter fence. A full sweep of the grounds was conducted despite low visibility due to whiteout conditions. Thus far, no trace of the soldier has been found.\\n\\nSupplies are holding at roughly sixty-five percent. However, the southern fuel tank appears to be leaking, and our reserves are draining more quickly than forecast. Power output from the generator has become unreliable, with routine brownouts reported in both Barrack Two and the Operations Shed each night.\\n\\nWe’ve been under near-continuous blizzard conditions for thirty-six hours. Ice accumulation is now exceeding three inches on most structures, further stressing already compromised equipment. Air support remains impossible under current conditions.\\n\\nMorale among the men is deteriorating. Several have reported disturbances during the night watch—descriptions include metallic scraping and what one referred to as “voices beneath the wind.” No physical evidence has been found to support these claims, but the reports are becoming more frequent. I recommend psychological assessments be conducted once the unit is rotated out.\\n\\nGiven the mounting concerns, I strongly advise immediate resupply by air drop if ground transport is not viable. Requesting authorization to initiate defensive lockdown protocol until relief or replacement can be arranged.\\n\\nRespectfully,\\nLT. R. MERCER\\nU.S. ARMY SIGNAL CORPS\\n"

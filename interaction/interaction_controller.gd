@@ -4,16 +4,21 @@ extends Node
 @onready var interaction_raycast: RayCast3D = %InteractionRaycast
 @onready var player_camera: Camera3D = %Camera3D
 @onready var hand: Marker3D = %Hand
+@onready var note_hand: Marker3D = %NoteHand
 @onready var default_reticle: TextureRect = %DefaultReticle
 @onready var highlight_reticle: TextureRect = %HighlightReticle
 @onready var interacting_reticle: TextureRect = %InteractingReticle
 @onready var interactable_check: Area3D = $"../InteractableCheck"
+@onready var note_overlay: Control = %NoteOverlay
+@onready var note_content: RichTextLabel = %NoteContent
 
 @onready var outline_material: Material = preload("res://materials/item_highlighter.tres")
 
 var current_object: Object
 var last_potential_object: Object
 var interaction_component: Node
+
+var is_note_overlay_display: bool = false
 
 func _ready() -> void:
 	interactable_check.body_entered.connect(_collectible_item_entered_range)
@@ -73,6 +78,9 @@ func _process(delta: float) -> void:
 					
 					if interaction_component.interaction_type == interaction_component.InteractionType.ITEM:
 						interaction_component.connect("item_collected", Callable(self, "_on_item_collected"))
+					
+					if interaction_component.interaction_type == interaction_component.InteractionType.NOTE:
+						interaction_component.connect("note_collected", Callable(self, "_on_note_collected"))
 						
 					if interaction_component.interaction_type == interaction_component.InteractionType.DOOR:
 						interaction_component.set_direction(current_object.to_local(interaction_raycast.get_collision_point()))
@@ -81,6 +89,14 @@ func _process(delta: float) -> void:
 				_unfocus()
 		else:
 			_unfocus()
+			
+func _input(event: InputEvent) -> void:
+	if is_note_overlay_display and event.is_action_pressed("primary"):
+		note_overlay.visible = false
+		is_note_overlay_display = false
+		var children = note_hand.get_children()
+		for child in children:
+			child.queue_free()
 
 ## Determines if the object the player is interacting with should stop mouse camera movement
 func isCameraLocked() -> bool:
@@ -105,6 +121,23 @@ func _unfocus() -> void:
 func _on_item_collected(item: Node):
 	# TODO: INVENTORY SYSTEM would handle storing this item here.
 	print("Player Collected: ", item)
+	
+func _on_note_collected(note: Node3D):
+	print("Player Collected Note: ", note)
+	# Reparent Note to the Hand
+	note.get_parent().remove_child(note)
+	note_hand.add_child(note)
+	note.transform.origin = note_hand.transform.origin
+	note.rotation.x = deg_to_rad(60)
+	note.rotation.y = deg_to_rad(30)
+	note_overlay.visible = true
+	is_note_overlay_display = true
+	var ic = note.get_node_or_null("InteractionComponent")
+	note_content.bbcode_enabled=true
+	note_content.text = ic.content
+	#note_content.text = "RUN!\n\n[i]a bloody handprint displayed on the bottom of the note[/i]"
+
+
 	
 ## Called when a collectible item is within range of the player
 func _collectible_item_entered_range(body: Node3D) -> void:

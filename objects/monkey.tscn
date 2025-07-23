@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=4 uid="uid://d3004l10ud08b"]
 
-[ext_resource type="PackedScene" uid="uid://bx1f3xwip7mx4" path="res://assets/Monkey.glb" id="1_hv1nj"]
+[ext_resource type="PackedScene" uid="uid://bx1f3xwip7mx4" path="res://assets/monkey/Monkey.glb" id="1_hv1nj"]
 [ext_resource type="Script" uid="uid://cyfueygj3rn87" path="res://scripts/monkey.gd" id="2_vqes0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8tb54"]

@@ -1,6 +1,6 @@
 extends Node
 
-@onready var light_detection_viewport: SubViewport = %SubViewport
+@onready var light_detection_viewport: SubViewport = %LightViewport
 @onready var sanity_cam_view: TextureRect = %SanityCamView
 @onready var average_light_color_view: ColorRect = %AverageLightColorView
 @onready var light_detection: Node3D = %LightDetection

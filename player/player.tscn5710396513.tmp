@@ -1,11 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://luy7w0qfph84"]
+[gd_scene load_steps=12 format=3 uid="uid://luy7w0qfph84"]
 
 [ext_resource type="Script" uid="uid://chmo46pkxaexp" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Texture2D" uid="uid://dgh3ul6rjlkgi" path="res://assets/reticles/white_reticle.png" id="2_g1dw6"]
 [ext_resource type="PackedScene" uid="uid://bnvad8jy4rflu" path="res://interaction/interaction_controller.tscn" id="2_rkbax"]
 [ext_resource type="Texture2D" uid="uid://d1jemmogcuxvf" path="res://assets/reticles/tile_0155.png" id="3_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
-[ext_resource type="Shader" uid="uid://bygn8p8ivfrb5" path="res://shaders/note_fade.gdshader" id="5_boad6"]
 [ext_resource type="PackedScene" uid="uid://c0bcshd6w44pb" path="res://player/sanity_controller.tscn" id="6_g6k8r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kqu6x"]
@@ -25,12 +24,6 @@ radius = 0.3
 height = 0.6
 radial_segments = 4
 rings = 1
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rgyib"]
-shader = ExtResource("5_boad6")
-shader_parameter/rect_width_px = 960.0
-shader_parameter/fade_width_px = 240.0
-shader_parameter/fade_strength = 0.745
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_oul6g")
@@ -162,53 +155,6 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
-
-[node name="CanvasLayer" type="CanvasLayer" parent="GUI"]
-
-[node name="NoteOverlay" type="Control" parent="GUI/CanvasLayer"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="BlackOverlay" type="ColorRect" parent="GUI/CanvasLayer/NoteOverlay"]
-material = SubResource("ShaderMaterial_rgyib")
-layout_mode = 0
-offset_left = 960.0
-offset_right = 1920.0
-offset_bottom = 1080.0
-color = Color(0, 0, 0, 1)
-
-[node name="Control" type="Control" parent="GUI/CanvasLayer/NoteOverlay"]
-anchors_preset = 0
-offset_left = 1205.0
-offset_top = 21.0
-offset_right = 1893.0
-offset_bottom = 1062.0
-
-[node name="NoteContent" type="RichTextLabel" parent="GUI/CanvasLayer/NoteOverlay/Control"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -513.5
-offset_bottom = 517.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "test text is typed here
-
-
-test"
-fit_content = true
-scroll_active = false
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="InteractionController" parent="." instance=ExtResource("2_rkbax")]
 unique_name_in_owner = true

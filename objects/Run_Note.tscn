@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://dlyxujkbtsmnm"]
+
+[ext_resource type="Texture2D" uid="uid://b1nngl0iobrqo" path="res://assets/notes/RUN.png" id="1_88qo3"]
+[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="2_m063h"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m063h"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m063h"]
+transparency = 1
+albedo_texture = ExtResource("1_88qo3")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_88qo3"]
+size = Vector3(2.2, 0.3, 3)
+
+[node name="RunNote" type="StaticBody3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.112, 0, 0, 0, 1.536, 0, 0, 0, 1.536, 0, 0, 0)
+layers = 2
+mesh = SubResource("PlaneMesh_m063h")
+surface_material_override/0 = SubResource("StandardMaterial3D_m063h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0168457, 0, -0.00854492)
+shape = SubResource("BoxShape3D_88qo3")
+
+[node name="InteractionComponent" parent="." node_paths=PackedStringArray("object_ref") instance=ExtResource("2_m063h")]
+object_ref = NodePath("..")
+interaction_type = 5
+content = "RUN!"
