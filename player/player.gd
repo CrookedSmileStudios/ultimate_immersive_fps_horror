@@ -8,6 +8,10 @@ extends CharacterBody3D
 @onready var standup_check: RayCast3D = $StandupCheck
 @onready var interaction_controller: Node = %InteractionController
 
+# Note sway variables
+@onready var note_hand: Marker3D = %NoteHand
+@export var note_sway_amount: float = .1
+
 # Movement Variables
 const walking_speed: float = 3.0
 const sprinting_speed: float = 5.0
@@ -19,6 +23,7 @@ var moving: bool = false
 var input_dir: Vector2 = Vector2.ZERO
 var direction: Vector3 = Vector3.ZERO
 var lerp_speed: float = 10.0
+var mouse_input: Vector2
 
 # Player Settings
 var base_fov: float = 90.0
@@ -61,8 +66,9 @@ func _input(event: InputEvent) -> void:
 		
 	if event is InputEventMouseMotion:
 		if current_sensitivity > 0.01 and not interaction_controller.isCameraLocked():
-			rotate_y(deg_to_rad(-event.relative.x * current_sensitivity))
-			head.rotate_x(deg_to_rad(-event.relative.y * current_sensitivity))
+			mouse_input = event.relative
+			rotate_y(deg_to_rad(-mouse_input.x * current_sensitivity))
+			head.rotate_x(deg_to_rad(-mouse_input.y * current_sensitivity))
 			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-85), deg_to_rad(85))
 	
 func _physics_process(delta: float) -> void:
@@ -92,6 +98,7 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 			
 	move_and_slide()
+	note_tilt_and_sway(input_dir, delta)
 
 func _process(delta: float) -> void:
 	# If we just unlocked camera, slowly bring sensitivity back to normal levels
@@ -182,3 +189,8 @@ func set_camera_locked(locked: bool) -> void:
 		sensitivity_fading_in = false
 	else:
 		sensitivity_fading_in = true
+
+func note_tilt_and_sway(input_dir: Vector2, delta: float) -> void:
+	if note_hand:
+		note_hand.rotation.z = lerp(note_hand.rotation.z, -input_dir.x * note_sway_amount, 10 * delta)
+		note_hand.rotation.x = lerp(note_hand.rotation.x, -input_dir.y * note_sway_amount, 10 * delta)

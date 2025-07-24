@@ -128,8 +128,8 @@ func _on_note_collected(note: Node3D):
 	note.get_parent().remove_child(note)
 	note_hand.add_child(note)
 	note.transform.origin = note_hand.transform.origin
-	note.rotation.x = deg_to_rad(60)
-	note.rotation.y = deg_to_rad(30)
+	note.position = Vector3(0.0,0.0,0.0)
+	note.rotation_degrees = Vector3(90,10,0)
 	note_overlay.visible = true
 	is_note_overlay_display = true
 	var ic = note.get_node_or_null("InteractionComponent")
