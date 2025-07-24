@@ -122,8 +122,8 @@ func _on_item_collected(item: Node):
 	# TODO: INVENTORY SYSTEM would handle storing this item here.
 	print("Player Collected: ", item)
 	
+	
 func _on_note_collected(note: Node3D):
-	print("Player Collected Note: ", note)
 	# Reparent Note to the Hand
 	note.get_parent().remove_child(note)
 	note_hand.add_child(note)
@@ -135,10 +135,7 @@ func _on_note_collected(note: Node3D):
 	var ic = note.get_node_or_null("InteractionComponent")
 	note_content.bbcode_enabled=true
 	note_content.text = ic.content
-	#note_content.text = "RUN!\n\n[i]a bloody handprint displayed on the bottom of the note[/i]"
 
-
-	
 ## Called when a collectible item is within range of the player
 func _collectible_item_entered_range(body: Node3D) -> void:
 	# TODO: Use Collision layers to ignore collisions with the player

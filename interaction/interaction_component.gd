@@ -251,4 +251,8 @@ func _collect_item() -> void:
 	
 ## Fires a signal that a player has picked up a note/log
 func _collect_note() -> void:
+	var col = get_parent().find_child("CollisionShape3D", true, false)
+	if col:
+		col.get_parent().remove_child(col)
+		col.queue_free()
 	emit_signal("note_collected", get_parent())
