@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://luy7w0qfph84"]
+[gd_scene load_steps=15 format=3 uid="uid://luy7w0qfph84"]
 
 [ext_resource type="Script" uid="uid://chmo46pkxaexp" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Texture2D" uid="uid://dgh3ul6rjlkgi" path="res://assets/reticles/white_reticle.png" id="2_g1dw6"]
+[ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://objects/Run_Note.tscn" id="2_rgyib"]
 [ext_resource type="PackedScene" uid="uid://bnvad8jy4rflu" path="res://interaction/interaction_controller.tscn" id="2_rkbax"]
 [ext_resource type="Texture2D" uid="uid://d1jemmogcuxvf" path="res://assets/reticles/tile_0155.png" id="3_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
@@ -100,6 +101,10 @@ fov = 90.0
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, -0.25, -0.75)
 
+[node name="RunNote" parent="Head/SubViewportContainer/SubViewport/NoteCamera/NoteHand" instance=ExtResource("2_rgyib")]
+transform = Transform3D(0.246202, 0.043412, -1.8976e-09, 0, -1.09278e-08, -0.25, -0.043412, 0.246202, -1.07618e-08, 0, 0, 0)
+visible = false
+
 [node name="LightViewport" type="SubViewport" parent="."]
 unique_name_in_owner = true
 handle_input_locally = false
@@ -159,6 +164,7 @@ stretch_mode = 3
 
 [node name="Debug" type="Label" parent="GUI/ReticleLayer/Control"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
