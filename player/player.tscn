@@ -7,8 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
 [ext_resource type="Shader" uid="uid://bygn8p8ivfrb5" path="res://shaders/note_fade.gdshader" id="5_boad6"]
 [ext_resource type="PackedScene" uid="uid://c0bcshd6w44pb" path="res://player/sanity_controller.tscn" id="6_g6k8r"]
+[ext_resource type="AudioStream" uid="uid://balac254rkql0" path="res://assets/sound_effects/footstep05.ogg" id="8_hg6s5"]
 [ext_resource type="AudioStream" uid="uid://b6cflqkbf4htm" path="res://assets/sound_effects/jump.ogg" id="9_8t03j"]
-[ext_resource type="AudioStream" uid="uid://2u6igummc8mp" path="res://assets/sound_effects/footstep_concrete_004.ogg" id="9_hg6s5"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kqu6x"]
 
@@ -220,12 +220,11 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Audio" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32472, 0)
 
 [node name="Footsteps" type="AudioStreamPlayer3D" parent="Audio"]
 unique_name_in_owner = true
-stream = ExtResource("9_hg6s5")
-volume_db = -20.0
+stream = ExtResource("8_hg6s5")
+volume_db = -25.0
 
 [node name="Jump" type="AudioStreamPlayer3D" parent="Audio"]
 unique_name_in_owner = true

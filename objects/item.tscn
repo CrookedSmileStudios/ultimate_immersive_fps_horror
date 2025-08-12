@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://blpg3l8h2pa1u"]
+[gd_scene load_steps=6 format=3 uid="uid://blpg3l8h2pa1u"]
 
 [ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="1_oqx7i"]
+[ext_resource type="AudioStream" uid="uid://dkfquhn7txsbi" path="res://assets/sound_effects/handleCoins2.ogg" id="2_nfg8c"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_nfg8c"]
 top_radius = 0.1
@@ -27,3 +28,4 @@ shape = SubResource("CylinderShape3D_vi0cm")
 [node name="InteractionComponent" parent="." node_paths=PackedStringArray("object_ref") instance=ExtResource("1_oqx7i")]
 object_ref = NodePath("..")
 interaction_type = 4
+primary_se = ExtResource("2_nfg8c")

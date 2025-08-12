@@ -48,7 +48,20 @@ var is_switch_snapping: bool = false
 signal item_collected(item: Node)
 signal note_collected(note: Node3D)
 
+# SoundEffects
+var primary_audio_player: AudioStreamPlayer3D
+var secondary_audio_player: AudioStreamPlayer3D
+@export var primary_se: AudioStreamOggVorbis
+@export var secondary_se: AudioStreamOggVorbis
+
 func _ready() -> void:
+	
+	# Initialize Audio
+	primary_audio_player = AudioStreamPlayer3D.new()
+	add_child(primary_audio_player)
+	secondary_audio_player = AudioStreamPlayer3D.new()
+	add_child(secondary_audio_player)
+	
 	match interaction_type:
 		InteractionType.DOOR:
 			starting_rotation = pivot_point.rotation.x
@@ -247,6 +260,7 @@ func calculate_cross_product(_mouse_position: Vector2) -> float:
 ## Fires a signal that a player has picked up a collectible item
 func _collect_item() -> void:
 	emit_signal("item_collected", get_parent())
+	_player_sound_effect(false)
 	get_parent().queue_free()
 	
 ## Fires a signal that a player has picked up a note/log
@@ -255,4 +269,13 @@ func _collect_note() -> void:
 	if col:
 		col.get_parent().remove_child(col)
 		col.queue_free()
+	_player_sound_effect(true)
 	emit_signal("note_collected", get_parent())
+
+func _player_sound_effect(visible: bool) -> void:
+	if primary_se:
+		primary_audio_player.stream = primary_se
+		primary_audio_player.play()
+		get_parent().visible = visible
+		self.can_interact = false
+		await primary_audio_player.finished

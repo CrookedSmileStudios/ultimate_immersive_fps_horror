@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dlyxujkbtsmnm"]
+[gd_scene load_steps=8 format=3 uid="uid://dlyxujkbtsmnm"]
 
 [ext_resource type="Texture2D" uid="uid://b1nngl0iobrqo" path="res://assets/notes/RUN.png" id="1_88qo3"]
 [ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="2_m063h"]
+[ext_resource type="AudioStream" uid="uid://bwdix3aa54how" path="res://assets/sound_effects/drawKnife2.ogg" id="3_srd6g"]
+[ext_resource type="AudioStream" uid="uid://cspfankmeykor" path="res://assets/sound_effects/drawKnife3.ogg" id="4_lmn0i"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_m063h"]
 
@@ -28,3 +30,5 @@ shape = SubResource("BoxShape3D_88qo3")
 object_ref = NodePath("..")
 interaction_type = 5
 content = "RUN!"
+primary_se = ExtResource("3_srd6g")
+secondary_se = ExtResource("4_lmn0i")

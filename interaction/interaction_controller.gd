@@ -17,6 +17,7 @@ extends Node
 var current_object: Object
 var last_potential_object: Object
 var interaction_component: Node
+var note_interaction_component: Node
 
 var is_note_overlay_display: bool = false
 
@@ -96,6 +97,12 @@ func _input(event: InputEvent) -> void:
 		is_note_overlay_display = false
 		var children = note_hand.get_children()
 		for child in children:
+			note_interaction_component.secondary_audio_player.play()
+			if note_interaction_component.secondary_se:
+				note_interaction_component.secondary_audio_player.stream = note_interaction_component.secondary_se
+				note_interaction_component.secondary_audio_player.play()
+				child.visible = false
+				await note_interaction_component.secondary_audio_player.finished
 			child.queue_free()
 
 ## Determines if the object the player is interacting with should stop mouse camera movement
@@ -132,9 +139,9 @@ func _on_note_collected(note: Node3D):
 	note.rotation_degrees = Vector3(90,10,0)
 	note_overlay.visible = true
 	is_note_overlay_display = true
-	var ic = note.get_node_or_null("InteractionComponent")
+	note_interaction_component = note.get_node_or_null("InteractionComponent")
 	note_content.bbcode_enabled=true
-	note_content.text = ic.content
+	note_content.text = note_interaction_component.content
 
 ## Called when a collectible item is within range of the player
 func _collectible_item_entered_range(body: Node3D) -> void:
