@@ -1,13 +1,14 @@
-[gd_scene load_steps=15 format=3 uid="uid://luy7w0qfph84"]
+[gd_scene load_steps=16 format=3 uid="uid://luy7w0qfph84"]
 
 [ext_resource type="Script" uid="uid://chmo46pkxaexp" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Texture2D" uid="uid://dgh3ul6rjlkgi" path="res://assets/reticles/white_reticle.png" id="2_g1dw6"]
-[ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://objects/Run_Note.tscn" id="2_rgyib"]
 [ext_resource type="PackedScene" uid="uid://bnvad8jy4rflu" path="res://interaction/interaction_controller.tscn" id="2_rkbax"]
 [ext_resource type="Texture2D" uid="uid://d1jemmogcuxvf" path="res://assets/reticles/tile_0155.png" id="3_qjkh3"]
 [ext_resource type="Texture2D" uid="uid://bgj2lgeergj4y" path="res://assets/reticles/tile_0156.png" id="4_g6k8r"]
 [ext_resource type="Shader" uid="uid://bygn8p8ivfrb5" path="res://shaders/note_fade.gdshader" id="5_boad6"]
 [ext_resource type="PackedScene" uid="uid://c0bcshd6w44pb" path="res://player/sanity_controller.tscn" id="6_g6k8r"]
+[ext_resource type="AudioStream" uid="uid://b6cflqkbf4htm" path="res://assets/sound_effects/jump.ogg" id="9_8t03j"]
+[ext_resource type="AudioStream" uid="uid://2u6igummc8mp" path="res://assets/sound_effects/footstep_concrete_004.ogg" id="9_hg6s5"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kqu6x"]
 
@@ -100,10 +101,6 @@ fov = 90.0
 [node name="NoteHand" type="Marker3D" parent="Head/SubViewportContainer/SubViewport/NoteCamera"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, -0.25, -0.75)
-
-[node name="RunNote" parent="Head/SubViewportContainer/SubViewport/NoteCamera/NoteHand" instance=ExtResource("2_rgyib")]
-transform = Transform3D(0.246202, 0.043412, -1.8976e-09, 0, -1.09278e-08, -0.25, -0.043412, 0.246202, -1.07618e-08, 0, 0, 0)
-visible = false
 
 [node name="LightViewport" type="SubViewport" parent="."]
 unique_name_in_owner = true
@@ -221,3 +218,17 @@ unique_name_in_owner = true
 
 [node name="SanityController" parent="." instance=ExtResource("6_g6k8r")]
 unique_name_in_owner = true
+
+[node name="Audio" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32472, 0)
+
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="Audio"]
+unique_name_in_owner = true
+stream = ExtResource("9_hg6s5")
+volume_db = -20.0
+
+[node name="Jump" type="AudioStreamPlayer3D" parent="Audio"]
+unique_name_in_owner = true
+stream = ExtResource("9_8t03j")
+volume_db = -20.0
+unit_size = 3.0
