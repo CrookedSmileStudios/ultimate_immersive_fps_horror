@@ -51,6 +51,8 @@ signal note_collected(note: Node3D)
 # SoundEffects
 var primary_audio_player: AudioStreamPlayer3D
 var secondary_audio_player: AudioStreamPlayer3D
+var previous_velocity: Vector3 = Vector3.ZERO
+var contact_velocity_threshold: float = 2.0
 @export var primary_se: AudioStreamOggVorbis
 @export var secondary_se: AudioStreamOggVorbis
 
@@ -63,6 +65,11 @@ func _ready() -> void:
 	add_child(secondary_audio_player)
 	
 	match interaction_type:
+		InteractionType.DEFAULT:
+			if object_ref.has_signal("body_entered"):
+				object_ref.connect("body_entered", Callable(self, "_on_body_entered"))
+				object_ref.contact_monitor = true
+				object_ref.max_contacts_reported = 1
 		InteractionType.DOOR:
 			starting_rotation = pivot_point.rotation.x
 			maximum_rotation = deg_to_rad(rad_to_deg(starting_rotation)+maximum_rotation)
@@ -131,7 +138,6 @@ func postInteract() -> void:
 				is_switch_snapping = true
 		InteractionType.WHEEL:
 			wheel_kickback = -sign(wheel_rotation) * wheel_kick_intensity
-
 
 func _process(delta: float) -> void:
 	match interaction_type:
@@ -260,7 +266,7 @@ func calculate_cross_product(_mouse_position: Vector2) -> float:
 ## Fires a signal that a player has picked up a collectible item
 func _collect_item() -> void:
 	emit_signal("item_collected", get_parent())
-	_player_sound_effect(false)
+	await _player_sound_effect(false, false)
 	get_parent().queue_free()
 	
 ## Fires a signal that a player has picked up a note/log
@@ -269,13 +275,19 @@ func _collect_note() -> void:
 	if col:
 		col.get_parent().remove_child(col)
 		col.queue_free()
-	_player_sound_effect(true)
+	_player_sound_effect(true, false)
 	emit_signal("note_collected", get_parent())
 
-func _player_sound_effect(visible: bool) -> void:
+func _player_sound_effect(visible: bool, interact: bool) -> void:
 	if primary_se:
 		primary_audio_player.stream = primary_se
 		primary_audio_player.play()
 		get_parent().visible = visible
-		self.can_interact = false
+		self.can_interact = interact
 		await primary_audio_player.finished
+		
+func _on_body_entered(node: Node) -> void:
+	var speed = object_ref.linear_velocity.length()
+	if speed > contact_velocity_threshold:
+		_player_sound_effect(true, true)
+		
