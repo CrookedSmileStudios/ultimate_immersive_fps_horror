@@ -94,6 +94,7 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="NoteCamera" type="Camera3D" parent="Head/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0795133, 2.18435, 0)
 cull_mask = 2
 fov = 90.0
@@ -229,5 +230,5 @@ volume_db = -25.0
 [node name="Jump" type="AudioStreamPlayer3D" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("9_8t03j")
-volume_db = -20.0
+volume_db = -10.0
 unit_size = 3.0

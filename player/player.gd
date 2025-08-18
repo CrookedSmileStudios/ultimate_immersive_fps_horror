@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var interaction_controller: Node = %InteractionController
 @onready var footsteps_se: AudioStreamPlayer3D = %Footsteps
 @onready var jump_se: AudioStreamPlayer3D = %Jump
+@onready var note_camera: Camera3D = %NoteCamera
 
 # Note sway variables
 @onready var note_hand: Marker3D = %NoteHand
@@ -184,7 +185,7 @@ func updateCamera(delta: float) -> void:
 		head_bobbing_index += head_bobbing_sprinting_speed * delta
 		
 	head_bobbing_vector.y = sin(head_bobbing_index)
-	head_bobbing_vector.x = (sin(head_bobbing_index/2.0)+0.5)
+	head_bobbing_vector.x = (sin(head_bobbing_index/2.0))
 	if moving:
 		eyes.position.y = lerp(eyes.position.y , head_bobbing_vector.y*(head_bobbing_current_intensity/2.0),delta*lerp_speed)
 		eyes.position.x = lerp(eyes.position.x , head_bobbing_vector.x*(head_bobbing_current_intensity),delta*lerp_speed)
@@ -192,6 +193,7 @@ func updateCamera(delta: float) -> void:
 		eyes.position.y = lerp(eyes.position.y , 0.0 ,delta*lerp_speed)
 		eyes.position.x = lerp(eyes.position.x , 0.0 ,delta*lerp_speed)
 	
+	note_camera.fov = camera_3d.fov
 	play_footsteps()
 	
 func set_camera_locked(locked: bool) -> void:
