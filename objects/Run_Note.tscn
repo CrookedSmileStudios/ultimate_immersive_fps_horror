@@ -15,10 +15,10 @@ albedo_texture = ExtResource("1_88qo3")
 size = Vector3(2.2, 0.3, 3)
 
 [node name="RunNote" type="StaticBody3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.112, 0, 0, 0, 1.536, 0, 0, 0, 1.536, 0, 0, 0)
-layers = 2
 mesh = SubResource("PlaneMesh_m063h")
 surface_material_override/0 = SubResource("StandardMaterial3D_m063h")
 

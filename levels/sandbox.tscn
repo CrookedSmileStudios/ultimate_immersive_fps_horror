@@ -1,8 +1,10 @@
-[gd_scene load_steps=32 format=4 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=34 format=4 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
 [ext_resource type="PackedScene" uid="uid://luy7w0qfph84" path="res://player/player.tscn" id="3_85hcc"]
+[ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://objects/Run_Note.tscn" id="3_h3ryc"]
+[ext_resource type="PackedScene" uid="uid://bfxxin08cd2er" path="res://objects/text_note.tscn" id="4_ubtly"]
 [ext_resource type="Texture2D" uid="uid://co5s5y18dhgev" path="res://assets/kenney_protoype_textures/PNG/Purple/texture_01.png" id="6_llpag"]
 [ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="7_tv6ri"]
 [ext_resource type="PackedScene" uid="uid://cprcy3ipbbl73" path="res://objects/switch.tscn" id="8_rgshf"]
@@ -133,6 +135,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 3.01, -6)
 use_collision = true
 size = Vector3(8, 2, 1)
 material = SubResource("StandardMaterial3D_gck8l")
+
+[node name="RunNote" parent="CrouchCheck" instance=ExtResource("3_h3ryc")]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 0, 0, 0.508946)
+
+[node name="RunNote2" parent="CrouchCheck" instance=ExtResource("3_h3ryc")]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, -1, 0, 0.508946)
+
+[node name="RunNote3" parent="CrouchCheck" instance=ExtResource("3_h3ryc")]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, -2, 0, 0.508946)
+
+[node name="Text_Note" parent="CrouchCheck" instance=ExtResource("4_ubtly")]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 1, 0, 0.526254)
+
+[node name="Text_Note2" parent="CrouchCheck" instance=ExtResource("4_ubtly")]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 2, 0, 0.526254)
+
+[node name="Text_Note3" parent="CrouchCheck" instance=ExtResource("4_ubtly")]
+transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 3, 0, 0.526254)
 
 [node name="Player" parent="." instance=ExtResource("3_85hcc")]
 transform = Transform3D(0.073029, 0, -0.99733, 0, 1, 0, 0.99733, 0, 0.073029, -3.11333, 1, 0.318248)

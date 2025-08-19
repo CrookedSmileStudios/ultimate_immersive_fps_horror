@@ -51,8 +51,8 @@ signal note_collected(note: Node3D)
 # SoundEffects
 var primary_audio_player: AudioStreamPlayer3D
 var secondary_audio_player: AudioStreamPlayer3D
-var previous_velocity: Vector3 = Vector3.ZERO
-var contact_velocity_threshold: float = 2.0
+var last_velocity: Vector3 = Vector3.ZERO
+var contact_velocity_threshold: float = 1.0
 @export var primary_se: AudioStreamOggVorbis
 @export var secondary_se: AudioStreamOggVorbis
 
@@ -138,6 +138,12 @@ func postInteract() -> void:
 				is_switch_snapping = true
 		InteractionType.WHEEL:
 			wheel_kickback = -sign(wheel_rotation) * wheel_kick_intensity
+
+func _physics_process(delta: float) -> void:
+	match interaction_type:
+		InteractionType.DEFAULT:
+			if object_ref:
+				last_velocity = object_ref.linear_velocity
 
 func _process(delta: float) -> void:
 	match interaction_type:
@@ -266,19 +272,22 @@ func calculate_cross_product(_mouse_position: Vector2) -> float:
 ## Fires a signal that a player has picked up a collectible item
 func _collect_item() -> void:
 	emit_signal("item_collected", get_parent())
-	await _player_sound_effect(false, false)
+	await _play_sound_effect(false, false)
 	get_parent().queue_free()
 	
 ## Fires a signal that a player has picked up a note/log
 func _collect_note() -> void:
 	var col = get_parent().find_child("CollisionShape3D", true, false)
+	var mesh = get_parent().find_child("MeshInstance3D", true, false)
+	if mesh:
+		mesh.layers = 2
 	if col:
 		col.get_parent().remove_child(col)
 		col.queue_free()
-	_player_sound_effect(true, false)
+	_play_sound_effect(true, false)
 	emit_signal("note_collected", get_parent())
 
-func _player_sound_effect(visible: bool, interact: bool) -> void:
+func _play_sound_effect(visible: bool, interact: bool) -> void:
 	if primary_se:
 		primary_audio_player.stream = primary_se
 		primary_audio_player.play()
@@ -287,7 +296,7 @@ func _player_sound_effect(visible: bool, interact: bool) -> void:
 		await primary_audio_player.finished
 		
 func _on_body_entered(node: Node) -> void:
-	var speed = object_ref.linear_velocity.length()
-	if speed > contact_velocity_threshold:
-		_player_sound_effect(true, true)
+	var impact_strength = (last_velocity - object_ref.linear_velocity).length()
+	if impact_strength > contact_velocity_threshold:
+		_play_sound_effect(true, true)
 		

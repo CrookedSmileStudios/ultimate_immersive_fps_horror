@@ -8,16 +8,17 @@
 [sub_resource type="PlaneMesh" id="PlaneMesh_e5cn3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beki5"]
+transparency = 1
 albedo_texture = ExtResource("1_qlwxl")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e4pb6"]
 size = Vector3(2.2, 0.3, 3)
 
 [node name="Text_Note" type="StaticBody3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.112, 0, 0, 0, 1.536, 0, 0, 0, 1.536, 0, 0, 0)
-layers = 2
 mesh = SubResource("PlaneMesh_e5cn3")
 surface_material_override/0 = SubResource("StandardMaterial3D_beki5")
 

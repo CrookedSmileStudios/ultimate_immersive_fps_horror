@@ -97,7 +97,7 @@ func _input(event: InputEvent) -> void:
 		is_note_overlay_display = false
 		var children = note_hand.get_children()
 		for child in children:
-			note_interaction_component.secondary_audio_player.play()
+			#note_interaction_component.secondary_audio_player.play()
 			if note_interaction_component.secondary_se:
 				note_interaction_component.secondary_audio_player.stream = note_interaction_component.secondary_se
 				note_interaction_component.secondary_audio_player.play()
