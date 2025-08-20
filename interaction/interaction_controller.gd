@@ -99,7 +99,6 @@ func _input(event: InputEvent) -> void:
 		for child in children:
 			#note_interaction_component.secondary_audio_player.play()
 			if note_interaction_component.secondary_se:
-				note_interaction_component.secondary_audio_player.stream = note_interaction_component.secondary_se
 				note_interaction_component.secondary_audio_player.play()
 				child.visible = false
 				await note_interaction_component.secondary_audio_player.finished

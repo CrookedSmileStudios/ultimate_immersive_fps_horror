@@ -33,6 +33,12 @@ var door_velocity: float = 0.0
 var door_smoothing: float = 80.0
 var door_input_active: bool = false
 var is_front: bool
+var door_opened: bool = false
+var creak_velocity_threshold: float = 0.005     # how fast the player has to open the door for the sound to play
+var shut_angle_threshold: float = 0.2           # how far the door is opened to count as "opened"
+var shut_snap_range: float = 0.05               # how close to starting_rotation counts as "closed"
+var creak_volume_scale: float = 1000.0          # how fast we get to max volume
+var fade_speed: float = 1.0                     # how fast sound fades in/out
 
 # Wheel Variables
 var wheel_kickback: float = 0.0
@@ -60,18 +66,20 @@ func _ready() -> void:
 	
 	# Initialize Audio
 	primary_audio_player = AudioStreamPlayer3D.new()
+	primary_audio_player.stream = primary_se
 	add_child(primary_audio_player)
 	secondary_audio_player = AudioStreamPlayer3D.new()
+	secondary_audio_player.stream = secondary_se
 	add_child(secondary_audio_player)
 	
 	match interaction_type:
 		InteractionType.DEFAULT:
 			if object_ref.has_signal("body_entered"):
-				object_ref.connect("body_entered", Callable(self, "_on_body_entered"))
+				object_ref.connect("body_entered", Callable(self, "_fire_default_collision"))
 				object_ref.contact_monitor = true
 				object_ref.max_contacts_reported = 1
 		InteractionType.DOOR:
-			starting_rotation = pivot_point.rotation.x
+			starting_rotation = pivot_point.rotation.y
 			maximum_rotation = deg_to_rad(rad_to_deg(starting_rotation)+maximum_rotation)
 		InteractionType.SWITCH:
 			starting_rotation = object_ref.rotation.z
@@ -155,6 +163,9 @@ func _process(delta: float) -> void:
 			door_angle = clamp(door_angle, starting_rotation, maximum_rotation)
 			pivot_point.rotation.y = door_angle
 			door_input_active = false
+			
+			if is_interacting:
+				update_door_sounds(delta)
 		InteractionType.WHEEL:
 			if abs(wheel_kickback) > 0.001:
 				wheel_rotation += wheel_kickback
@@ -287,16 +298,51 @@ func _collect_note() -> void:
 	_play_sound_effect(true, false)
 	emit_signal("note_collected", get_parent())
 
+## Default method to play the primary sound effect of a given object
 func _play_sound_effect(visible: bool, interact: bool) -> void:
 	if primary_se:
-		primary_audio_player.stream = primary_se
 		primary_audio_player.play()
 		get_parent().visible = visible
 		self.can_interact = interact
 		await primary_audio_player.finished
 		
-func _on_body_entered(node: Node) -> void:
+## Fires when a default object collides with something in the world
+func _fire_default_collision(node: Node) -> void:
 	var impact_strength = (last_velocity - object_ref.linear_velocity).length()
 	if impact_strength > contact_velocity_threshold:
 		_play_sound_effect(true, true)
-		
+
+## Fires when the player is interacting with a door
+func update_door_sounds(delta: float) -> void:
+	# --- CREAK LOGIC ---
+	# Get the velocity of the door movement in this given frame.
+	# The volume should be relative to how fast/slow the playeris moving the door
+	var velocity_amount: float = abs(door_velocity)
+	var target_volume: float = clamp((velocity_amount - creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
+
+	# Only set target volume if we pass the threshold
+	if velocity_amount > creak_velocity_threshold:
+		target_volume = clamp((velocity_amount - creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
+
+	# Start playing if not already
+	if not primary_audio_player.playing and primary_se:
+		primary_audio_player.volume_db = -80.0  # start silent
+		primary_audio_player.play()
+
+	# Smooth fade towards target volume (even if target is 0 → fade out)
+	if primary_audio_player.playing:
+		var current_vol = db_to_linear(primary_audio_player.volume_db)
+		var new_vol = lerp(current_vol, target_volume, delta * fade_speed)
+		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 3.0))
+
+	# --- SHUT LOGIC ---
+	# Check if the player opened the door.
+	if abs(door_angle - starting_rotation) > shut_angle_threshold:
+		door_opened = true
+	
+	# If the door was previosuly opened and the player is now shutting it
+	if door_opened and abs(door_angle - starting_rotation) < shut_snap_range:
+		if secondary_se:
+			secondary_audio_player.volume_db = -8.0
+			secondary_audio_player.play()
+		door_opened = false

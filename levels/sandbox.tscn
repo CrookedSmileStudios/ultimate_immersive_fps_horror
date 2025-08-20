@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=4 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=36 format=4 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
@@ -7,8 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://bfxxin08cd2er" path="res://objects/text_note.tscn" id="4_ubtly"]
 [ext_resource type="Texture2D" uid="uid://co5s5y18dhgev" path="res://assets/kenney_protoype_textures/PNG/Purple/texture_01.png" id="6_llpag"]
 [ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="7_tv6ri"]
+[ext_resource type="AudioStream" uid="uid://bvbk4xjx711wx" path="res://assets/sound_effects/DoorCreak.ogg" id="8_gtt2g"]
 [ext_resource type="PackedScene" uid="uid://cprcy3ipbbl73" path="res://objects/switch.tscn" id="8_rgshf"]
 [ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/light.gd" id="9_50mym"]
+[ext_resource type="AudioStream" uid="uid://b3ge80vub6p6p" path="res://assets/sound_effects/DoorClose.ogg" id="9_e5k14"]
 [ext_resource type="Script" uid="uid://3b0mfmma4m02" path="res://scripts/bridge.gd" id="9_jpsdj"]
 [ext_resource type="PackedScene" uid="uid://dxo43pwgdu1p5" path="res://objects/cube_1_kg.tscn" id="10_h8jws"]
 [ext_resource type="PackedScene" uid="uid://d3004l10ud08b" path="res://objects/monkey.tscn" id="10_pkbto"]
@@ -158,7 +160,7 @@ transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-0
 transform = Transform3D(0.073029, 0, -0.99733, 0, 1, 0, 0.99733, 0, 0.073029, -3.11333, 1, 0.318248)
 
 [node name="Door" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.0268, 1, 7)
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0.9732, 1, 4)
 
 [node name="PivotPoint" type="Node3D" parent="Door"]
 
@@ -178,6 +180,8 @@ object_ref = NodePath("..")
 interaction_type = 1
 maximum_rotation = 120.0
 pivot_point = NodePath("../..")
+primary_se = ExtResource("8_gtt2g")
+secondary_se = ExtResource("9_e5k14")
 
 [node name="Label3D" type="Label3D" parent="Door/PivotPoint/Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772632, 2.25389, 0.0714302)

@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhifhdp582mcf"]
+[gd_scene load_steps=8 format=3 uid="uid://dhifhdp582mcf"]
 
 [ext_resource type="Texture2D" uid="uid://co5s5y18dhgev" path="res://assets/kenney_protoype_textures/PNG/Purple/texture_01.png" id="1_j7xx1"]
 [ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="2_khffo"]
+[ext_resource type="AudioStream" uid="uid://bvbk4xjx711wx" path="res://assets/sound_effects/DoorCreak.ogg" id="3_4hvcy"]
+[ext_resource type="AudioStream" uid="uid://b3ge80vub6p6p" path="res://assets/sound_effects/DoorClose.ogg" id="4_87mug"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_4hvcy"]
 size = Vector3(1.6, 2.6, 0.1)
@@ -33,6 +35,8 @@ shape = SubResource("BoxShape3D_encw8")
 object_ref = NodePath("..")
 interaction_type = 1
 pivot_point = NodePath("../..")
+primary_se = ExtResource("3_4hvcy")
+secondary_se = ExtResource("4_87mug")
 
 [node name="Label3D" type="Label3D" parent="PivotPoint/Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772632, 2.25389, 0.0714302)
