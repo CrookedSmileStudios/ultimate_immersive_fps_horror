@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=4 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=40 format=4 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
@@ -10,14 +10,16 @@
 [ext_resource type="AudioStream" uid="uid://bvbk4xjx711wx" path="res://assets/sound_effects/DoorCreak.ogg" id="8_gtt2g"]
 [ext_resource type="PackedScene" uid="uid://cprcy3ipbbl73" path="res://objects/switch.tscn" id="8_rgshf"]
 [ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/light.gd" id="9_50mym"]
-[ext_resource type="AudioStream" uid="uid://b3ge80vub6p6p" path="res://assets/sound_effects/DoorClose.ogg" id="9_e5k14"]
 [ext_resource type="Script" uid="uid://3b0mfmma4m02" path="res://scripts/bridge.gd" id="9_jpsdj"]
+[ext_resource type="AudioStream" uid="uid://dcxprooa8cia3" path="res://assets/sound_effects/DoorClose2.ogg" id="9_o0b4d"]
 [ext_resource type="PackedScene" uid="uid://dxo43pwgdu1p5" path="res://objects/cube_1_kg.tscn" id="10_h8jws"]
 [ext_resource type="PackedScene" uid="uid://d3004l10ud08b" path="res://objects/monkey.tscn" id="10_pkbto"]
 [ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://objects/item.tscn" id="11_rgshf"]
 [ext_resource type="AudioStream" uid="uid://d2cs8q0fvfc47" path="res://assets/sound_effects/lever_pull.ogg" id="11_smb53"]
 [ext_resource type="Script" uid="uid://cl8sca13omrjc" path="res://scripts/delete.gd" id="12_50mym"]
 [ext_resource type="AudioStream" uid="uid://dl50afq2unc1h" path="res://assets/sound_effects/lever_snap.ogg" id="12_hk7wi"]
+[ext_resource type="AudioStream" uid="uid://cmnb1j6kcmnog" path="res://assets/sound_effects/wheel_spin.ogg" id="14_o0b4d"]
+[ext_resource type="AudioStream" uid="uid://lokl2ig0ohhc" path="res://assets/sound_effects/wheel_kickback.ogg" id="15_yn25f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rgshf"]
 sky_top_color = Color(0.280211, 0.337572, 0.417356, 1)
@@ -183,7 +185,7 @@ interaction_type = 1
 maximum_rotation = 120.0
 pivot_point = NodePath("../..")
 primary_se = ExtResource("8_gtt2g")
-secondary_se = ExtResource("9_e5k14")
+secondary_se = ExtResource("9_o0b4d")
 
 [node name="Label3D" type="Label3D" parent="Door/PivotPoint/Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772632, 2.25389, 0.0714302)
@@ -273,6 +275,8 @@ object_ref = NodePath("..")
 interaction_type = 3
 maximum_rotation = 360.0
 nodes_to_affect = [NodePath("../../../PivotPoint"), null, null, null]
+primary_se = ExtResource("14_o0b4d")
+secondary_se = ExtResource("15_yn25f")
 
 [node name="PivotPoint" type="Node3D" parent="Podium_Wheel"]
 transform = Transform3D(1, -8.74228e-08, 8.74228e-08, 8.74228e-08, -4.37114e-08, -1, 8.74228e-08, 1, -4.37114e-08, 1, -1, -1)
