@@ -39,6 +39,8 @@ var shut_angle_threshold: float = 0.2            # how far the door is opened to
 var shut_snap_range: float = 0.05                # how close to starting_rotation counts as "closed"
 var creak_volume_scale: float = 1000.0           # how fast we get to max volume
 var door_fade_speed: float = 1.0                 # how fast sound fades in/out
+var door_at_start_triggered: bool = false
+var prev_door_angle: float = 0.0
 
 # Wheel Variables
 var wheel_kickback: float = 0.0
@@ -57,6 +59,7 @@ var switch_moved: bool = false
 var last_switch_angle: float = 0.0
 var switch_creak_velocity_threshold: float = 0.01
 var switch_fade_speed: float = 50.0
+var switch_kickback_triggered: bool = false
 
 # Signals
 signal item_collected(item: Node)
@@ -165,6 +168,7 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	match interaction_type:
 		InteractionType.DOOR:
+			
 			if not door_input_active:
 				door_velocity = lerp(door_velocity, 0.0, delta * 4.0)
 			
@@ -172,8 +176,13 @@ func _process(delta: float) -> void:
 			door_angle = clamp(door_angle, starting_rotation, maximum_rotation)
 			pivot_point.rotation.y = door_angle
 			door_input_active = false
-			
-			update_door_sounds(delta)
+
+			if prev_door_angle == door_angle:
+				stop_door_sounds(delta)
+			else:
+				update_door_sounds(delta)
+				
+			prev_door_angle = door_angle
 		InteractionType.WHEEL:
 			if is_interacting:
 				update_wheel_sounds(delta)
@@ -201,21 +210,30 @@ func _process(delta: float) -> void:
 						secondary_audio_player.play()
 			else:
 				wheel_kickback_triggered = false
-		InteractionType.SWITCH: 
+		InteractionType.SWITCH:
+			if is_interacting:
+				update_switch_sounds(delta)
+			else:
+				stop_switch_sounds(delta) 
 			if is_switch_snapping:
+				# Trigger the kickback and play the sound only once at start
+				if not switch_kickback_triggered:
+					switch_kickback_triggered = true
+					if secondary_se and not secondary_audio_player.playing:
+						secondary_audio_player.stop()
+						secondary_audio_player.volume_db = 0.0
+						secondary_audio_player.play()
 				object_ref.rotation.z = lerp(object_ref.rotation.z, switch_target_rotation, delta * switch_lerp_speed)
 
 				# Stop snapping when close enough
 				if abs(object_ref.rotation.z - switch_target_rotation) < 0.01:
 					object_ref.rotation.z = switch_target_rotation
-					update_switch_sounds(delta, true)
 					is_switch_snapping = false
 
 				var percentage: float = (object_ref.rotation.z - starting_rotation) / (maximum_rotation - starting_rotation)
 				notify_nodes(percentage)
-				
-			if is_interacting:
-				update_switch_sounds(delta, false)
+			else:
+				switch_kickback_triggered = false
 
 func _input(event: InputEvent) -> void:
 	if is_interacting:
@@ -378,10 +396,9 @@ func update_door_sounds(delta: float) -> void:
 			primary_audio_player.stop()
 		door_opened = false
 		
-func update_switch_sounds(delta: float, move_by_snapping: bool) -> void:
-	# --- Calculate rotation speed ---
+func update_switch_sounds(delta: float) -> void:
+	# --- Calculate angular speed ---
 	var angular_speed = abs(object_ref.rotation.z - last_switch_angle) / max(delta, 0.0001)
-	print("(", object_ref.rotation.z, " - ", last_switch_angle, ") / ", max(delta, 0.0001), " = ", angular_speed)
 	last_switch_angle = object_ref.rotation.z
 
 	# --- Determine target volume based on threshold ---
@@ -391,7 +408,7 @@ func update_switch_sounds(delta: float, move_by_snapping: bool) -> void:
 
 	# --- Start pull sound if needed ---
 	if not primary_audio_player.playing and primary_se and target_volume > 0:
-		primary_audio_player.volume_db = -15.0  # start silent
+		primary_audio_player.volume_db = -15.0
 		primary_audio_player.play()
 		
 	# --- Smooth fade in/out ---
@@ -401,13 +418,22 @@ func update_switch_sounds(delta: float, move_by_snapping: bool) -> void:
 		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.5))
 
 	# Play "thunk" when snapping completes
-	# In update_switch_sounds or _process after snapping
-	if switch_moved or move_by_snapping:
+	if switch_moved:
 		if abs(object_ref.rotation.z - maximum_rotation) < 0.01 or abs(object_ref.rotation.z - starting_rotation) < 0.01:
-			if secondary_se and not secondary_audio_player.playing:
-				secondary_audio_player.volume_db = -6.0
+			if secondary_se:
+				secondary_audio_player.volume_db = -0.0
 				secondary_audio_player.play()
 			switch_moved = false  # reset after playing
+
+func stop_switch_sounds(delta: float) -> void:
+	if primary_audio_player.playing:
+		var current_vol = db_to_linear(primary_audio_player.volume_db)
+		var new_vol = lerp(current_vol, 0.0, delta * switch_fade_speed)
+		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.0))
+
+		# Stop completely once inaudible
+		if new_vol < 0.001:
+			primary_audio_player.stop()	
 
 func update_wheel_sounds(delta: float) -> void:
 	# --- Calculate angular speed ---
@@ -421,7 +447,7 @@ func update_wheel_sounds(delta: float) -> void:
 
 	# --- Start looping creak if not playing and needed ---
 	if not primary_audio_player.playing and primary_se and target_volume > 0:
-		primary_audio_player.volume_db = -15.0   # start silent
+		primary_audio_player.volume_db = -15.0
 		primary_audio_player.play()
 
 	# --- Smooth fade in/out ---
@@ -438,6 +464,16 @@ func stop_wheel_sounds(delta: float) -> void:
 	if primary_audio_player.playing:
 		var current_vol = db_to_linear(primary_audio_player.volume_db)
 		var new_vol = lerp(current_vol, 0.0, delta * wheel_fade_speed)
+		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.0))
+
+		# Stop completely once inaudible
+		if new_vol < 0.001:
+			primary_audio_player.stop()
+
+func stop_door_sounds(delta: float) -> void:
+	if primary_audio_player.playing:
+		var current_vol = db_to_linear(primary_audio_player.volume_db)
+		var new_vol = lerp(current_vol, 0.0, delta * door_fade_speed)
 		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.0))
 
 		# Stop completely once inaudible

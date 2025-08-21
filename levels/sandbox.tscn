@@ -273,7 +273,7 @@ shape = SubResource("BoxShape3D_7wgt2")
 [node name="InteractionComponent" parent="Podium_Wheel/Wheel/Wheel" node_paths=PackedStringArray("object_ref", "nodes_to_affect") instance=ExtResource("7_tv6ri")]
 object_ref = NodePath("..")
 interaction_type = 3
-maximum_rotation = 360.0
+maximum_rotation = 1080.0
 nodes_to_affect = [NodePath("../../../PivotPoint"), null, null, null]
 primary_se = ExtResource("14_o0b4d")
 secondary_se = ExtResource("15_yn25f")
