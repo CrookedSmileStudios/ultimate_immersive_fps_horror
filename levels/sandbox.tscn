@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=4 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=38 format=4 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
@@ -15,7 +15,9 @@
 [ext_resource type="PackedScene" uid="uid://dxo43pwgdu1p5" path="res://objects/cube_1_kg.tscn" id="10_h8jws"]
 [ext_resource type="PackedScene" uid="uid://d3004l10ud08b" path="res://objects/monkey.tscn" id="10_pkbto"]
 [ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://objects/item.tscn" id="11_rgshf"]
+[ext_resource type="AudioStream" uid="uid://d2cs8q0fvfc47" path="res://assets/sound_effects/lever_pull.ogg" id="11_smb53"]
 [ext_resource type="Script" uid="uid://cl8sca13omrjc" path="res://scripts/delete.gd" id="12_50mym"]
+[ext_resource type="AudioStream" uid="uid://dl50afq2unc1h" path="res://assets/sound_effects/lever_snap.ogg" id="12_hk7wi"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rgshf"]
 sky_top_color = Color(0.280211, 0.337572, 0.417356, 1)
@@ -202,6 +204,8 @@ transform = Transform3D(0.866025, -0.5, -2.34249e-08, 0.5, 0.866025, 8.74228e-08
 
 [node name="InteractionComponent" parent="Podium_Switch/Switch/Switch" index="2" node_paths=PackedStringArray("nodes_to_affect")]
 nodes_to_affect = [NodePath("../../../SpotLight3D"), NodePath("../../../../Monkey")]
+primary_se = ExtResource("11_smb53")
+secondary_se = ExtResource("12_hk7wi")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Podium_Switch"]
 transform = Transform3D(1, 1.74846e-07, 1.74846e-07, -1.74846e-07, -4.37114e-08, 1, 1.74846e-07, -1, -4.37114e-08, 0, 2, 0)

@@ -34,11 +34,11 @@ var door_smoothing: float = 80.0
 var door_input_active: bool = false
 var is_front: bool
 var door_opened: bool = false
-var creak_velocity_threshold: float = 0.005     # how fast the player has to open the door for the sound to play
-var shut_angle_threshold: float = 0.2           # how far the door is opened to count as "opened"
-var shut_snap_range: float = 0.05               # how close to starting_rotation counts as "closed"
-var creak_volume_scale: float = 1000.0          # how fast we get to max volume
-var fade_speed: float = 1.0                     # how fast sound fades in/out
+var door_creak_velocity_threshold: float = 0.005 # how fast the player has to open the door for the sound to play
+var shut_angle_threshold: float = 0.2            # how far the door is opened to count as "opened"
+var shut_snap_range: float = 0.05                # how close to starting_rotation counts as "closed"
+var creak_volume_scale: float = 1000.0           # how fast we get to max volume
+var door_fade_speed: float = 1.0                 # how fast sound fades in/out
 
 # Wheel Variables
 var wheel_kickback: float = 0.0
@@ -49,6 +49,10 @@ var wheel_rotation: float = 0.0
 var switch_target_rotation: float = 0.0
 var switch_lerp_speed: float = 8.0
 var is_switch_snapping: bool = false
+var switch_moved: bool = false
+var last_switch_angle: float = 0.0
+var switch_creak_velocity_threshold: float = 0.01
+var switch_fade_speed: float = 50.0
 
 # Signals
 signal item_collected(item: Node)
@@ -101,6 +105,7 @@ func preInteract(hand: Marker3D) -> void:
 			lock_camera = true
 		InteractionType.SWITCH:
 			lock_camera = true
+			switch_moved = false
 		InteractionType.WHEEL:
 			lock_camera = true
 			previous_mouse_position = get_viewport().get_mouse_position()
@@ -185,10 +190,14 @@ func _process(delta: float) -> void:
 				# Stop snapping when close enough
 				if abs(object_ref.rotation.z - switch_target_rotation) < 0.01:
 					object_ref.rotation.z = switch_target_rotation
+					update_switch_sounds(delta, true)
 					is_switch_snapping = false
 
 				var percentage: float = (object_ref.rotation.z - starting_rotation) / (maximum_rotation - starting_rotation)
 				notify_nodes(percentage)
+				
+			if is_interacting:
+				update_switch_sounds(delta, false)
 
 func _input(event: InputEvent) -> void:
 	if is_interacting:
@@ -206,10 +215,13 @@ func _input(event: InputEvent) -> void:
 					door_velocity = lerp(door_velocity, delta, 1.0 / door_smoothing)
 			InteractionType.SWITCH:
 				if event is InputEventMouseMotion:
-
+					var prev_angle = object_ref.rotation.z
 					object_ref.rotate_z(event.relative.y * .001)
 					object_ref.rotation.z = clamp(object_ref.rotation.z, starting_rotation, maximum_rotation)
 					var percentage: float = (object_ref.rotation.z - starting_rotation) / (maximum_rotation - starting_rotation)
+					
+					if abs(object_ref.rotation.z - prev_angle) > 0.01:
+						switch_moved = true
 						
 					notify_nodes(percentage)
 			InteractionType.WHEEL:
@@ -283,7 +295,7 @@ func calculate_cross_product(_mouse_position: Vector2) -> float:
 ## Fires a signal that a player has picked up a collectible item
 func _collect_item() -> void:
 	emit_signal("item_collected", get_parent())
-	await _play_sound_effect(false, false)
+	await _play_primary_sound_effect(false, false)
 	get_parent().queue_free()
 	
 ## Fires a signal that a player has picked up a note/log
@@ -295,22 +307,30 @@ func _collect_note() -> void:
 	if col:
 		col.get_parent().remove_child(col)
 		col.queue_free()
-	_play_sound_effect(true, false)
+	_play_primary_sound_effect(true, false)
 	emit_signal("note_collected", get_parent())
 
 ## Default method to play the primary sound effect of a given object
-func _play_sound_effect(visible: bool, interact: bool) -> void:
+func _play_primary_sound_effect(visible: bool, interact: bool) -> void:
 	if primary_se:
 		primary_audio_player.play()
 		get_parent().visible = visible
 		self.can_interact = interact
 		await primary_audio_player.finished
 		
+## Default method to play the secondary sound effect of a given object
+func _play_secondary_sound_effect(visible: bool, interact: bool) -> void:
+	if secondary_se and secondary_audio_player.playing == false:
+		secondary_audio_player.play()
+		get_parent().visible = visible
+		self.can_interact = interact
+		await secondary_audio_player.finished
+		
 ## Fires when a default object collides with something in the world
 func _fire_default_collision(node: Node) -> void:
 	var impact_strength = (last_velocity - object_ref.linear_velocity).length()
 	if impact_strength > contact_velocity_threshold:
-		_play_sound_effect(true, true)
+		_play_primary_sound_effect(true, true)
 
 ## Fires when the player is interacting with a door
 func update_door_sounds(delta: float) -> void:
@@ -318,11 +338,11 @@ func update_door_sounds(delta: float) -> void:
 	# Get the velocity of the door movement in this given frame.
 	# The volume should be relative to how fast/slow the playeris moving the door
 	var velocity_amount: float = abs(door_velocity)
-	var target_volume: float = clamp((velocity_amount - creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
+	var target_volume: float = clamp((velocity_amount - door_creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
 
 	# Only set target volume if we pass the threshold
-	if velocity_amount > creak_velocity_threshold:
-		target_volume = clamp((velocity_amount - creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
+	if velocity_amount > door_creak_velocity_threshold:
+		target_volume = clamp((velocity_amount - door_creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
 
 	# Start playing if not already
 	if not primary_audio_player.playing and primary_se:
@@ -332,7 +352,7 @@ func update_door_sounds(delta: float) -> void:
 	# Smooth fade towards target volume (even if target is 0 → fade out)
 	if primary_audio_player.playing:
 		var current_vol = db_to_linear(primary_audio_player.volume_db)
-		var new_vol = lerp(current_vol, target_volume, delta * fade_speed)
+		var new_vol = lerp(current_vol, target_volume, delta * door_fade_speed)
 		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 3.0))
 
 	# --- SHUT LOGIC ---
@@ -346,3 +366,33 @@ func update_door_sounds(delta: float) -> void:
 			secondary_audio_player.volume_db = -8.0
 			secondary_audio_player.play()
 		door_opened = false
+		
+func update_switch_sounds(delta: float, move_by_snapping: bool) -> void:
+	# --- Calculate rotation speed ---
+	var angular_speed = abs(object_ref.rotation.z - last_switch_angle) / max(delta, 0.0001)
+	last_switch_angle = object_ref.rotation.z
+
+	# --- Determine target volume based on threshold ---
+	var target_volume: float = 0.0
+	if angular_speed > switch_creak_velocity_threshold:
+		target_volume = clamp((angular_speed - switch_creak_velocity_threshold) * creak_volume_scale, 0.0, 1.5)
+
+	# --- Start pull sound if needed ---
+	if not primary_audio_player.playing and primary_se and target_volume > 0:
+		primary_audio_player.volume_db = -15.0  # start silent
+		primary_audio_player.play()
+		
+	# --- Smooth fade in/out ---
+	if primary_audio_player.playing:
+		var current_vol = db_to_linear(primary_audio_player.volume_db)
+		var new_vol = lerp(current_vol, target_volume, delta * switch_fade_speed)
+		primary_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.5))
+
+	# Play "thunk" when snapping completes
+	# In update_switch_sounds or _process after snapping
+	if switch_moved or move_by_snapping:
+		if abs(object_ref.rotation.z - maximum_rotation) < 0.01 or abs(object_ref.rotation.z - starting_rotation) < 0.01:
+			if secondary_se and not secondary_audio_player.playing:
+				secondary_audio_player.volume_db = -6.0
+				secondary_audio_player.play()
+			switch_moved = false  # reset after playing
