@@ -39,24 +39,23 @@ var shut_angle_threshold: float = 0.2            # how far the door is opened to
 var shut_snap_range: float = 0.05                # how close to starting_rotation counts as "closed"
 var creak_volume_scale: float = 1000.0           # how fast we get to max volume
 var door_fade_speed: float = 1.0                 # how fast sound fades in/out
-var door_at_start_triggered: bool = false
-var prev_door_angle: float = 0.0
+var prev_door_angle: float = 0.0                 # angle of the door on the previous frame
 
 # Wheel Variables
 var wheel_kickback: float = 0.0
 var wheel_kick_intensity: float = 0.1
 var wheel_rotation: float = 0.0
-var wheel_creak_velocity_threshold: float = 0.005
-var wheel_fade_speed: float = 50.0
-var last_wheel_angle: float = 0.0
-var wheel_kickback_triggered: bool = false
+var wheel_creak_velocity_threshold: float = 0.005 # how fast the player has to turn the wheel for the sound to play
+var wheel_fade_speed: float = 50.0                # how fast sound fades in/out
+var last_wheel_angle: float = 0.0                 # angle of the wheel on the previous frame
+var wheel_kickback_triggered: bool = false        # true if the player has stopped interacting and the wheel is kicking back
 
 # Switch Variables
 var switch_target_rotation: float = 0.0
 var switch_lerp_speed: float = 8.0
 var is_switch_snapping: bool = false
 var switch_moved: bool = false
-var last_switch_angle: float = 0.0
+var last_switch_angle: float = 0.0                        # angle of the door on the previous frame
 var switch_creak_velocity_threshold: float = 0.01
 var switch_fade_speed: float = 50.0
 var switch_kickback_triggered: bool = false
@@ -366,16 +365,17 @@ func update_door_sounds(delta: float) -> void:
 	# Get the velocity of the door movement in this given frame.
 	# The volume should be relative to how fast/slow the playeris moving the door
 	var velocity_amount: float = abs(door_velocity)
-	var target_volume: float = clamp((velocity_amount - door_creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
+	var target_volume: float = 0.0
 
 	# Only set target volume if we pass the threshold
-	if velocity_amount > door_creak_velocity_threshold:
+	if velocity_amount > door_creak_velocity_threshold and door_opened:
 		target_volume = clamp((velocity_amount - door_creak_velocity_threshold) * creak_volume_scale, 0.0, 1.0)
 
 	# Start playing if not already
-	if not primary_audio_player.playing and primary_se:
-		primary_audio_player.volume_db = -80.0  # start silent
+	if not primary_audio_player.playing and primary_se and target_volume > 0.0:
+		primary_audio_player.volume_db = -15.0  # start silent
 		primary_audio_player.play()
+		print("PLAY")
 
 	# Smooth fade towards target volume (even if target is 0 → fade out)
 	if primary_audio_player.playing:
@@ -394,6 +394,7 @@ func update_door_sounds(delta: float) -> void:
 			secondary_audio_player.volume_db = -8.0
 			secondary_audio_player.play()
 			primary_audio_player.stop()
+			print("stop!")
 		door_opened = false
 		
 func update_switch_sounds(delta: float) -> void:
