@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://rx5fgdlb6d6l"]
+[gd_scene load_steps=16 format=3 uid="uid://rx5fgdlb6d6l"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_cmxv0"]
 [ext_resource type="PackedScene" uid="uid://bocfqnlvmtbs3" path="res://assets/streetlight/streetlight.tscn" id="2_c73gi"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://cssd0vgh1k8ay" path="res://scripts/puzzle_complete.gd" id="6_ffxto"]
 [ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/light.gd" id="7_7vvha"]
 [ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://objects/Run_Note.tscn" id="8_ffxto"]
-[ext_resource type="PackedScene" uid="uid://bfxxin08cd2er" path="res://objects/text_note.tscn" id="9_7vvha"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_crchu"]
 sky_top_color = Color(0.192713, 0.165358, 0.166351, 1)
@@ -174,9 +173,6 @@ transform = Transform3D(1, 1.74846e-07, 1.74846e-07, -1.74846e-07, -4.37114e-08,
 script = ExtResource("7_7vvha")
 
 [node name="RunNote" parent="." instance=ExtResource("8_ffxto")]
-transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, -0.00251985, 3.37523, -4.48239)
-
-[node name="Text_Note" parent="." instance=ExtResource("9_7vvha")]
-transform = Transform3D(7.45058e-09, 0.25, -1.09278e-08, 0, -1.09278e-08, -0.25, -0.25, 7.45058e-09, -2.22045e-16, -4.4787, 3.34228, 0.0360003)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -2.8537, 1.17257, -1.00413)
 
 [editable path="Env/Streetlight"]

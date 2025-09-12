@@ -66,7 +66,13 @@ func _process(delta: float) -> void:
 		var potential_object: Object = interaction_raycast.get_collider()
 		
 		if potential_object and potential_object is Node:
-			interaction_component = potential_object.get_node_or_null("InteractionComponent")
+			var node: Node = potential_object
+			interaction_component = null
+			while node:
+				interaction_component = node.get_node_or_null("InteractionComponent")
+				if interaction_component:
+					break
+				node = node.get_parent()
 			if interaction_component:
 				if interaction_component.can_interact == false:
 					return
@@ -75,7 +81,7 @@ func _process(delta: float) -> void:
 				_focus()
 				if Input.is_action_just_pressed("primary"):
 					current_object = potential_object
-					interaction_component.preInteract(hand)
+					interaction_component.preInteract(hand, current_object)
 					
 					if interaction_component.interaction_type == interaction_component.InteractionType.ITEM:
 						interaction_component.connect("item_collected", Callable(self, "_on_item_collected"))

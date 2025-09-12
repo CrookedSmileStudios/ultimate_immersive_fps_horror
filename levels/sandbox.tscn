@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=4 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=44 format=4 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
@@ -9,28 +9,32 @@
 [ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="7_tv6ri"]
 [ext_resource type="AudioStream" uid="uid://bvbk4xjx711wx" path="res://assets/sound_effects/DoorCreak.ogg" id="8_gtt2g"]
 [ext_resource type="PackedScene" uid="uid://cprcy3ipbbl73" path="res://objects/switch.tscn" id="8_rgshf"]
+[ext_resource type="AudioStream" uid="uid://c71j68mfq7ibg" path="res://assets/sound_effects/keypad_failure.ogg" id="9_2gvps"]
 [ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/light.gd" id="9_50mym"]
 [ext_resource type="Script" uid="uid://3b0mfmma4m02" path="res://scripts/bridge.gd" id="9_jpsdj"]
 [ext_resource type="AudioStream" uid="uid://dcxprooa8cia3" path="res://assets/sound_effects/DoorClose2.ogg" id="9_o0b4d"]
 [ext_resource type="PackedScene" uid="uid://dxo43pwgdu1p5" path="res://objects/cube_1_kg.tscn" id="10_h8jws"]
+[ext_resource type="AudioStream" uid="uid://cvbn0lbipl178" path="res://assets/sound_effects/DoorLocked.ogg" id="10_hto2u"]
 [ext_resource type="PackedScene" uid="uid://d3004l10ud08b" path="res://objects/monkey.tscn" id="10_pkbto"]
+[ext_resource type="AudioStream" uid="uid://bdsic3er2n4u4" path="res://assets/sound_effects/keypad_success.ogg" id="10_sv1wq"]
 [ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://objects/item.tscn" id="11_rgshf"]
 [ext_resource type="AudioStream" uid="uid://d2cs8q0fvfc47" path="res://assets/sound_effects/lever_pull.ogg" id="11_smb53"]
 [ext_resource type="Script" uid="uid://cl8sca13omrjc" path="res://scripts/delete.gd" id="12_50mym"]
 [ext_resource type="AudioStream" uid="uid://dl50afq2unc1h" path="res://assets/sound_effects/lever_snap.ogg" id="12_hk7wi"]
 [ext_resource type="AudioStream" uid="uid://cmnb1j6kcmnog" path="res://assets/sound_effects/wheel_spin.ogg" id="14_o0b4d"]
 [ext_resource type="AudioStream" uid="uid://lokl2ig0ohhc" path="res://assets/sound_effects/wheel_kickback.ogg" id="15_yn25f"]
+[ext_resource type="PackedScene" uid="uid://cs7dsiexgq6ls" path="res://objects/keypad.tscn" id="21_yn25f"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rgshf"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o0b4d"]
 sky_top_color = Color(0.280211, 0.337572, 0.417356, 1)
 sky_horizon_color = Color(0.737255, 0.560784, 0.403922, 1)
 ground_bottom_color = Color(0.214832, 0.259833, 0.444617, 1)
 ground_horizon_color = Color(0.735352, 0.562619, 0.404639, 1)
 
 [sub_resource type="Sky" id="Sky_50mym"]
-sky_material = SubResource("ProceduralSkyMaterial_rgshf")
+sky_material = SubResource("ProceduralSkyMaterial_o0b4d")
 
-[sub_resource type="Environment" id="Environment_pkbto"]
+[sub_resource type="Environment" id="Environment_yn25f"]
 background_mode = 2
 sky = SubResource("Sky_50mym")
 tonemap_mode = 2
@@ -118,10 +122,10 @@ shadow_mesh = SubResource("ArrayMesh_s6ip2")
 [node name="Sandbox" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_pkbto")
+environment = SubResource("Environment_yn25f")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 shadow_enabled = true
 
 [node name="Floor" type="CSGBox3D" parent="."]
@@ -184,8 +188,10 @@ object_ref = NodePath("..")
 interaction_type = 1
 maximum_rotation = 120.0
 pivot_point = NodePath("../..")
+is_locked = true
 primary_se = ExtResource("8_gtt2g")
 secondary_se = ExtResource("9_o0b4d")
+tertiary_se = ExtResource("10_hto2u")
 
 [node name="Label3D" type="Label3D" parent="Door/PivotPoint/Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772632, 2.25389, 0.0714302)
@@ -284,7 +290,6 @@ script = ExtResource("9_jpsdj")
 
 [node name="Bridge" type="CSGBox3D" parent="Podium_Wheel/PivotPoint"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.5, -8)
-visible = false
 use_collision = true
 size = Vector3(2, 1, 16)
 
@@ -321,4 +326,18 @@ mesh = SubResource("ArrayMesh_vqes0")
 skeleton = NodePath("")
 surface_material_override/0 = SubResource("StandardMaterial3D_owg7o")
 
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 1.74846e-07, 1.74846e-07, -2.41675e-07, 0.840671, 0.541547, -5.23006e-08, -0.541547, 0.840671, 3.18896, 3.80159, -3.20195)
+layers = 1048575
+script = ExtResource("9_50mym")
+
+[node name="Keypad" parent="." instance=ExtResource("21_yn25f")]
+transform = Transform3D(0.25, 0, -2.66454e-15, 0, 0.25, 0, 2.66454e-15, 0, 0.25, -1.19836, 2.52017, 3.94805)
+
+[node name="InteractionComponent" parent="Keypad" index="14" node_paths=PackedStringArray("nodes_to_affect")]
+nodes_to_affect = [NodePath("../../Door/PivotPoint/Door/InteractionComponent")]
+secondary_se = ExtResource("9_2gvps")
+tertiary_se = ExtResource("10_sv1wq")
+
 [editable path="Podium_Switch/Switch"]
+[editable path="Keypad"]
