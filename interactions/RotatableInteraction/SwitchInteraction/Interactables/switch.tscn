@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cprcy3ipbbl73"]
 
-[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="1_bd5kx"]
+[ext_resource type="PackedScene" uid="uid://130sklj6vifa" path="res://interactions/RotatableInteraction/SwitchInteraction/switch_interaction.tscn" id="1_c2kr4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_rbxwc"]
 size = Vector3(0.1, 0.75, 0.1)
@@ -18,6 +18,5 @@ mesh = SubResource("BoxMesh_rbxwc")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Switch"]
 shape = SubResource("BoxShape3D_bd5kx")
 
-[node name="InteractionComponent" parent="Switch" node_paths=PackedStringArray("object_ref") instance=ExtResource("1_bd5kx")]
-object_ref = NodePath("..")
-interaction_type = 2
+[node name="SwitchInteraction" parent="Switch" instance=ExtResource("1_c2kr4")]
+maximum_rotation = 90.0

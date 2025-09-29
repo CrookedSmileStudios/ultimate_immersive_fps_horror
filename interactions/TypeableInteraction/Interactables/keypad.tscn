@@ -1,10 +1,7 @@
-[gd_scene load_steps=40 format=4 uid="uid://cs7dsiexgq6ls"]
+[gd_scene load_steps=37 format=4 uid="uid://cs7dsiexgq6ls"]
 
 [ext_resource type="FontFile" uid="uid://bfpxnyfu3pq23" path="res://assets/fonts/matrixtype-font/MatrixtypeDisplay-9MyE5.ttf" id="1_46j3w"]
-[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="1_gupjq"]
-[ext_resource type="AudioStream" uid="uid://bs4ibc7hslmnh" path="res://assets/sound_effects/keypad_press.ogg" id="3_gqlp6"]
-[ext_resource type="AudioStream" uid="uid://bdsic3er2n4u4" path="res://assets/sound_effects/keypad_success.ogg" id="4_87ufm"]
-[ext_resource type="AudioStream" uid="uid://c71j68mfq7ibg" path="res://assets/sound_effects/keypad_failure.ogg" id="5_0pqlf"]
+[ext_resource type="PackedScene" uid="uid://cgbia103o27yn" path="res://interactions/TypeableInteraction/typeable_interaction.tscn" id="2_ge6mp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_niax5"]
 resource_name = "mat22"
@@ -915,9 +912,4 @@ text = "-----"
 font = ExtResource("1_46j3w")
 font_size = 75
 
-[node name="InteractionComponent" parent="." node_paths=PackedStringArray("object_ref") instance=ExtResource("1_gupjq")]
-object_ref = NodePath("../Body")
-interaction_type = 6
-primary_se = ExtResource("3_gqlp6")
-secondary_se = ExtResource("4_87ufm")
-tertiary_se = ExtResource("5_0pqlf")
+[node name="TypeableInteraction" parent="." instance=ExtResource("2_ge6mp")]

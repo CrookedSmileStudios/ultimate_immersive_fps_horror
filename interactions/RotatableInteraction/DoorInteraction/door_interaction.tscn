@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7gcbuthbdh4p"]
+
+[ext_resource type="Script" uid="uid://bw311etdsg2xk" path="res://interactions/RotatableInteraction/DoorInteraction/door_interaction.gd" id="1_te84t"]
+
+[node name="DoorInteraction" type="Node"]
+script = ExtResource("1_te84t")

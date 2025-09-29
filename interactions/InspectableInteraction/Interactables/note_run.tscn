@@ -1,9 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dlyxujkbtsmnm"]
+[gd_scene load_steps=6 format=3 uid="uid://dlyxujkbtsmnm"]
 
 [ext_resource type="Texture2D" uid="uid://b1nngl0iobrqo" path="res://assets/notes/RUN.png" id="1_88qo3"]
-[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="2_m063h"]
-[ext_resource type="AudioStream" uid="uid://bwdix3aa54how" path="res://assets/sound_effects/drawKnife2.ogg" id="3_srd6g"]
-[ext_resource type="AudioStream" uid="uid://cspfankmeykor" path="res://assets/sound_effects/drawKnife3.ogg" id="4_lmn0i"]
+[ext_resource type="PackedScene" uid="uid://fq0vsj4an3fg" path="res://interactions/InspectableInteraction/inspectable_interation.tscn" id="2_gb2pc"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_m063h"]
 
@@ -26,9 +24,5 @@ surface_material_override/0 = SubResource("StandardMaterial3D_m063h")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0168457, 0, -0.00854492)
 shape = SubResource("BoxShape3D_88qo3")
 
-[node name="InteractionComponent" parent="." node_paths=PackedStringArray("object_ref") instance=ExtResource("2_m063h")]
-object_ref = NodePath("..")
-interaction_type = 5
+[node name="InspectableInteration" parent="." instance=ExtResource("2_gb2pc")]
 content = "RUN!"
-primary_se = ExtResource("3_srd6g")
-secondary_se = ExtResource("4_lmn0i")

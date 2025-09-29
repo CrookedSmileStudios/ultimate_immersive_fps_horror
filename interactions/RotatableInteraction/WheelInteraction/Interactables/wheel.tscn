@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dudqqo5it1iuy"]
 
-[ext_resource type="PackedScene" uid="uid://cigvl0v04l7cs" path="res://interaction/interaction_component.tscn" id="1_45fdq"]
+[ext_resource type="PackedScene" uid="uid://crawf680nj5eo" path="res://interactions/RotatableInteraction/WheelInteraction/wheel_interaction.tscn" id="1_bgj8w"]
 [ext_resource type="Texture2D" uid="uid://ctkh4o54eonug" path="res://assets/reticles/wheel_reticle.png" id="2_c5phc"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_c5phc"]
@@ -64,10 +64,7 @@ mesh = SubResource("BoxMesh_c5phc")
 transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_7wgt2")
 
-[node name="InteractionComponent" parent="Wheel" node_paths=PackedStringArray("object_ref") instance=ExtResource("1_45fdq")]
-object_ref = NodePath("..")
-interaction_type = 3
-maximum_rotation = 360.0
+[node name="WheelInteraction" parent="Wheel" instance=ExtResource("1_bgj8w")]
 
 [node name="Icon" type="Sprite3D" parent="."]
 transform = Transform3D(-0.025, 0, 0, 0, -0.025, 0, 0, 0, -0.025, 0, 0, 0.076906)

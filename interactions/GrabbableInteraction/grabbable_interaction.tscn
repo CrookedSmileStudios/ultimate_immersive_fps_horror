@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpu21rrvk7fi2"]
+
+[ext_resource type="Script" uid="uid://2o4kavrid2jv" path="res://interactions/GrabbableInteraction/grabbable_interaction.gd" id="1_rovix"]
+
+[node name="GrabbableInteraction" type="Node"]
+script = ExtResource("1_rovix")

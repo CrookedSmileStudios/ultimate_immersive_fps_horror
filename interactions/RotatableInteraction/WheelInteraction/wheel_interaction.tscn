@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://crawf680nj5eo"]
+
+[ext_resource type="Script" uid="uid://c2rvy2ymc6vi5" path="res://interactions/RotatableInteraction/WheelInteraction/wheel_interaction.gd" id="1_y6bol"]
+
+[node name="WheelInteraction" type="Node"]
+script = ExtResource("1_y6bol")
+maximum_rotation = 360.0
