@@ -1,0 +1,75 @@
+[gd_scene load_steps=6 format=3 uid="uid://de5xesms0vw07"]
+
+[ext_resource type="Texture2D" uid="uid://co5s5y18dhgev" path="res://assets/kenney_protoype_textures/PNG/Purple/texture_01.png" id="1_tbq12"]
+[ext_resource type="PackedScene" uid="uid://b7gcbuthbdh4p" path="res://interactions/RotatableInteraction/DoorInteraction/door_interaction.tscn" id="2_db48h"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4hvcy"]
+size = Vector3(1.6, 2.6, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_87mug"]
+albedo_texture = ExtResource("1_tbq12")
+uv1_triplanar = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_encw8"]
+size = Vector3(1.6, 2.6, 0.1)
+
+[node name="DoubleDoor" type="Node3D"]
+
+[node name="Door" type="Node3D" parent="."]
+
+[node name="PivotPoint" type="Node3D" parent="Door"]
+unique_name_in_owner = true
+
+[node name="Door" type="StaticBody3D" parent="Door/PivotPoint"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Door/PivotPoint/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.3, 0)
+mesh = SubResource("BoxMesh_4hvcy")
+surface_material_override/0 = SubResource("StandardMaterial3D_87mug")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door/PivotPoint/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.3, 0)
+shape = SubResource("BoxShape3D_encw8")
+
+[node name="Label3D" type="Label3D" parent="Door/PivotPoint/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772632, 2.25389, 0.0714302)
+text = "FRONT"
+
+[node name="Label3D2" type="Label3D" parent="Door/PivotPoint/Door"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.817836, 2.2115, -0.111188)
+text = "BACK"
+
+[node name="DoorInteraction" parent="Door/PivotPoint/Door" node_paths=PackedStringArray("pivot_point") instance=ExtResource("2_db48h")]
+pivot_point = NodePath("../..")
+flip_pivot = false
+maximum_rotation = 150.0
+
+[node name="Door2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 0)
+
+[node name="PivotPoint" type="Node3D" parent="Door2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0, 0)
+
+[node name="Door" type="StaticBody3D" parent="Door2/PivotPoint"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Door2/PivotPoint/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.3, 0)
+mesh = SubResource("BoxMesh_4hvcy")
+surface_material_override/0 = SubResource("StandardMaterial3D_87mug")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door2/PivotPoint/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.3, 0)
+shape = SubResource("BoxShape3D_encw8")
+
+[node name="Label3D" type="Label3D" parent="Door2/PivotPoint/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.772632, 2.25389, 0.0714302)
+text = "FRONT"
+
+[node name="Label3D2" type="Label3D" parent="Door2/PivotPoint/Door"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.817836, 2.2115, -0.111188)
+text = "BACK"
+
+[node name="DoorInteraction" parent="Door2/PivotPoint/Door" node_paths=PackedStringArray("pivot_point") instance=ExtResource("2_db48h")]
+pivot_point = NodePath("../..")
+maximum_rotation = 150.0

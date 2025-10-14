@@ -23,6 +23,9 @@ Use this class for standard hinged doors that open on a pivot.
 ## True if the door is locked, false otherwise
 @export var is_locked: bool = false
 
+## True if the pivot is on the other side of the door, the movement rotation should flip
+@export var flip_pivot: bool = true
+
 ## Sound effect to play when the door shuts
 @export var shut_sound_effect: AudioStreamOggVorbis = preload("res://assets/sound_effects/DoorClose2.ogg")
 var shut_audio_player: AudioStreamPlayer3D
@@ -47,6 +50,11 @@ func _ready() -> void:
 	super()
 	# Initialize Rotations
 	starting_rotation = pivot_point.rotation.y
+	
+	if flip_pivot:
+		maximum_rotation = starting_rotation - abs(maximum_rotation)
+	else:
+		maximum_rotation = starting_rotation + abs(maximum_rotation)
 	
 	# Initialize Audio
 	shut_audio_player = AudioStreamPlayer3D.new()
@@ -99,14 +107,20 @@ func _process(delta: float) -> void:
 
 		if is_locked:
 			var lock_wiggle: float = 0.02
-			current_angle = clamp(current_angle, starting_rotation, starting_rotation+lock_wiggle)
+			if flip_pivot:
+				current_angle = clamp(current_angle, starting_rotation - lock_wiggle, starting_rotation)
+			else:
+				current_angle = clamp(current_angle, starting_rotation, starting_rotation + lock_wiggle)
 			pivot_point.rotation.y = current_angle
 			
 			if input_active and not locked_audio_player.playing and not previous_angle == current_angle:
 				locked_audio_player.play()
 				input_active = false
 		else:
-			current_angle = clamp(current_angle, starting_rotation, maximum_rotation)
+			if flip_pivot:
+				current_angle = clamp(current_angle, maximum_rotation, starting_rotation)
+			else:
+				current_angle = clamp(current_angle, starting_rotation, maximum_rotation)
 			pivot_point.rotation.y = current_angle
 			input_active = false
 
@@ -135,6 +149,9 @@ func _input(event: InputEvent) -> void:
 			var delta: float = -event.relative.y * 0.001
 			if not is_front:
 				delta = -delta
+			if flip_pivot:
+				delta = -delta  # mirror input for mirrored doors
+				
 			# Simulate resistance to small motions
 			if abs(delta) < 0.01:
 				delta *= 0.25

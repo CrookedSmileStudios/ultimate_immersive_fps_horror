@@ -36,10 +36,6 @@ func pre_interact() -> void:
 ## Run every frame while the player is interacting with this object
 func interact() -> void:
 	super()
-	
-	if not can_interact:
-		return
-		
 	emit_signal("item_collected", get_parent())
 	await _play_collect_item_sound_effect()
 	get_parent().queue_free()

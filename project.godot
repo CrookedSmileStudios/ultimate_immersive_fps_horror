@@ -25,7 +25,6 @@ window/vsync/vsync_mode=0
 
 folder_colors={
 "res://interactions/": "blue",
-"res://interactions/AbstractInteraction/": "blue",
 "res://interactions/CollectableInteraction/": "teal",
 "res://interactions/GrabbableInteraction/": "green",
 "res://interactions/InspectableInteraction/": "yellow",
