@@ -23,8 +23,11 @@ Use this class for standard hinged doors that open on a pivot.
 ## True if the door is locked, false otherwise
 @export var is_locked: bool = false
 
-## True if the pivot is on the other side of the door, the movement rotation should flip
+## True if the pivot is on the right side of the door, the movement rotation should flip
 @export var flip_pivot: bool = true
+
+## If true, reverses the mouse input direction for opening/closing the door
+@export var reverse_input_direction: bool = false
 
 ## Sound effect to play when the door shuts
 @export var shut_sound_effect: AudioStreamOggVorbis = preload("res://assets/sound_effects/DoorClose2.ogg")
@@ -150,7 +153,9 @@ func _input(event: InputEvent) -> void:
 			if not is_front:
 				delta = -delta
 			if flip_pivot:
-				delta = -delta  # mirror input for mirrored doors
+				delta = -delta  # flip input for pivot being on bottom right
+			if reverse_input_direction:
+				delta = -delta  # invert input for push/pull reversal
 				
 			# Simulate resistance to small motions
 			if abs(delta) < 0.01:

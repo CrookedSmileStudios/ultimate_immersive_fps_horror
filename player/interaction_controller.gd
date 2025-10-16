@@ -42,7 +42,7 @@ func _process(delta: float) -> void:
 				interacting_reticle.visible = true
 				
 			# Limit interaction distance
-			if player_camera.global_transform.origin.distance_to(interaction_raycast.get_collision_point()) > 3.0:
+			if player_camera.global_transform.origin.distance_to(interaction_raycast.get_collision_point()) > 5.0:
 				interaction_component.post_interact()
 				current_object = null
 				_unfocus()

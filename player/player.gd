@@ -60,6 +60,13 @@ var head_bobbing_index: float = 0.0
 var last_bob_position_x: float = 0.0                                            # Tracks the previous horizontal head-bob position
 var last_bob_direction: int = 0                                                 # Tracks the previous movement direction of the bob (-1 = left, +1 = right)
 
+# Leaning Vars
+var lean_angle: float = 12.0                # How much to tilt (degrees)
+var lean_offset: float = 0.25               # How far to move camera sideways
+var lean_speed: float = 8.0                 # How quickly to lerp between states
+var target_lean: float = 0.0                        # -1 = left, 1 = right, 0 = neutral
+var current_lean: float = 0.0
+
 # Sanity Vars
 var light_level: float = 0.0
 
@@ -69,6 +76,13 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("quit"):
 		get_tree().quit()
+		
+	if Input.is_action_pressed("lean_left"):
+		target_lean = -1.0
+	elif Input.is_action_pressed("lean_right"):
+		target_lean = 1.0
+	else:
+		target_lean = 0.0	
 		
 	if event is InputEventMouseMotion:
 		if current_sensitivity > 0.01 and not interaction_controller.isCameraLocked():
@@ -192,6 +206,15 @@ func updateCamera(delta: float) -> void:
 	else:
 		eyes.position.y = lerp(eyes.position.y , 0.0 ,delta*lerp_speed)
 		eyes.position.x = lerp(eyes.position.x , 0.0 ,delta*lerp_speed)
+		
+	# head lean
+	current_lean = lerp(current_lean, target_lean, delta * lean_speed)
+	
+	var target_tilt: float = deg_to_rad(-lean_angle) * current_lean
+	var target_offset: float = lean_offset * current_lean
+	
+	camera_3d.rotation.z = lerp(camera_3d.rotation.z, target_tilt, delta * lean_speed)
+	camera_3d.position.x = lerp(camera_3d.position.x, target_offset, delta * lean_speed)
 	
 	note_camera.fov = camera_3d.fov
 	play_footsteps()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=27 format=3 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
@@ -7,14 +7,16 @@
 [ext_resource type="PackedScene" uid="uid://bfxxin08cd2er" path="res://interactions/InspectableInteraction/Interactables/note_text.tscn" id="4_ubtly"]
 [ext_resource type="PackedScene" uid="uid://cprcy3ipbbl73" path="res://interactions/RotatableInteraction/SwitchInteraction/Interactables/switch.tscn" id="7_ubtly"]
 [ext_resource type="PackedScene" uid="uid://dudqqo5it1iuy" path="res://interactions/RotatableInteraction/WheelInteraction/Interactables/wheel.tscn" id="8_gtt2g"]
-[ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/light.gd" id="9_50mym"]
+[ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/OldScripts/light.gd" id="9_50mym"]
 [ext_resource type="AudioStream" uid="uid://cmnb1j6kcmnog" path="res://assets/sound_effects/wheel_spin.ogg" id="9_gtt2g"]
-[ext_resource type="Script" uid="uid://3b0mfmma4m02" path="res://scripts/bridge.gd" id="9_jpsdj"]
+[ext_resource type="Script" uid="uid://3b0mfmma4m02" path="res://scripts/OldScripts/bridge.gd" id="9_jpsdj"]
 [ext_resource type="PackedScene" uid="uid://dxo43pwgdu1p5" path="res://interactions/GrabbableInteraction/Interactables/cube_1_kg.tscn" id="10_h8jws"]
 [ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://interactions/CollectableInteraction/Interactables/item.tscn" id="11_rgshf"]
 [ext_resource type="PackedScene" uid="uid://dhifhdp582mcf" path="res://interactions/RotatableInteraction/DoorInteraction/Interactables/door.tscn" id="14_h3ryc"]
 [ext_resource type="AudioStream" uid="uid://bvbk4xjx711wx" path="res://assets/sound_effects/DoorCreak.ogg" id="15_ubtly"]
 [ext_resource type="PackedScene" uid="uid://de5xesms0vw07" path="res://interactions/RotatableInteraction/DoorInteraction/Interactables/double_door.tscn" id="17_e5k14"]
+[ext_resource type="PackedScene" uid="uid://cucux2geb02js" path="res://interactions/RotatableInteraction/DoorInteraction/Interactables/power_box_with_door.tscn" id="18_smb53"]
+[ext_resource type="PackedScene" uid="uid://bm3cd6n1t8n74" path="res://interactions/GrabbableInteraction/Interactables/battery.tscn" id="19_hk7wi"]
 [ext_resource type="PackedScene" uid="uid://cs7dsiexgq6ls" path="res://interactions/TypeableInteraction/Interactables/keypad.tscn" id="21_yn25f"]
 [ext_resource type="PackedScene" uid="uid://nv6su48cqvpq" path="res://interactions/GrabbableInteraction/Interactables/cube_5_kg.tscn" id="23_2gvps"]
 
@@ -95,7 +97,7 @@ transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-0
 transform = Transform3D(0.25, 0, 0, 0, -1.09278e-08, -0.25, 0, 0.25, -1.09278e-08, 3, 0, 0.526254)
 
 [node name="Player" parent="." instance=ExtResource("3_85hcc")]
-transform = Transform3D(0.073029, 0, -0.99733, 0, 1, 0, 0.99733, 0, 0.073029, -1.00138, 1, 8.46129)
+transform = Transform3D(0.99733, 0, 0.073029, 0, 1, 0, -0.073029, 0, 0.99733, -4.31223, 1, 0.156837)
 
 [node name="Podium_Switch" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 1.74846e-07, 0, 1, 0, -1.74846e-07, 0, 1, 4, 2, 6)
@@ -183,9 +185,19 @@ maximum_rotation = 120.0
 [node name="DoubleDoor" parent="." instance=ExtResource("17_e5k14")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.66184, 1, 10.9814)
 
+[node name="Power_Box_WithDoor" parent="." instance=ExtResource("18_smb53")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -4.36794, 1.06583, -6.18618)
+
+[node name="Battery" parent="." instance=ExtResource("19_hk7wi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.39591, 1.34173, -4.82325)
+
 [editable path="Podium_Switch/Switch"]
 [editable path="Podium_Wheel/Wheel/Wheel"]
 [editable path="Cube_1kg"]
 [editable path="Item"]
+[editable path="Item2"]
+[editable path="Item3"]
+[editable path="Item4"]
 [editable path="Keypad"]
 [editable path="Door"]
+[editable path="Power_Box_WithDoor"]
