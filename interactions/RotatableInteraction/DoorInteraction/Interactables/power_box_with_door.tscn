@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=4 uid="uid://cucux2geb02js"]
+[gd_scene load_steps=21 format=4 uid="uid://cucux2geb02js"]
 
 [ext_resource type="PackedScene" uid="uid://b7gcbuthbdh4p" path="res://interactions/RotatableInteraction/DoorInteraction/door_interaction.tscn" id="1_folt7"]
+[ext_resource type="Script" uid="uid://crfnn1j5tb0qy" path="res://scripts/PuzzleScripts/light_bulb.gd" id="2_4q7qf"]
 [ext_resource type="Script" uid="uid://diojmbv1fgtyb" path="res://scripts/PuzzleScripts/power_box.gd" id="3_4q7qf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bh2a8"]
@@ -181,6 +182,8 @@ resource_name = "FFEB3B"
 albedo_color = Color(1, 0.926075, 0.220916, 1)
 roughness = 0.903922
 emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_taf1x"]
 resource_name = "78909C"
@@ -312,19 +315,21 @@ maximum_rotation = 180.0
 
 [node name="Light bulb" type="Node3D" parent="."]
 transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, 0, 0.850522, 0)
+script = ExtResource("2_4q7qf")
 
 [node name="Light_bulb_01_Circle_008" type="MeshInstance3D" parent="Light bulb"]
 mesh = SubResource("ArrayMesh_83jvo")
 skeleton = NodePath("")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Light bulb"]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 10.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.8, 0)
 visible = false
 light_energy = 16.0
 
-[node name="BatteryArea" type="Area3D" parent="." node_paths=PackedStringArray("light")]
+[node name="BatteryArea" type="Area3D" parent="." node_paths=PackedStringArray("nodes_to_affect", "light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63534, 0)
 script = ExtResource("3_4q7qf")
+nodes_to_affect = [NodePath("../Light bulb")]
 light = NodePath("../Light bulb/OmniLight3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="BatteryArea"]

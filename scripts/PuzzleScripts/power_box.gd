@@ -4,7 +4,7 @@ extends Area3D
 ## that has an "execute" method that you can call using the provided notify_nodes(percentage: float) method.
 @export var nodes_to_affect: Array[Node]
 
-@export var light: OmniLight3D
+@export var light: Light3D
 
 @export var snap_offset: Vector3 = Vector3.ZERO
 var snapped_object: RigidBody3D = null
