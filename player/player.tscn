@@ -162,7 +162,6 @@ stretch_mode = 3
 
 [node name="Debug" type="Label" parent="GUI/ReticleLayer/Control"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

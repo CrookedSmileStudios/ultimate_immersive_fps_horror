@@ -107,7 +107,7 @@ func _physics_process(delta: float) -> void:
 		if is_in_air == true: # If true, this is the first frame since landing.
 			footsteps_se.play()
 			is_in_air = false
-		if Input.is_action_just_pressed("jump"):
+		if Input.is_action_just_pressed("jump") and player_state != PlayerState.CROUCHING:
 			velocity.y = jump_velocity
 			jump_se.play()
 			
