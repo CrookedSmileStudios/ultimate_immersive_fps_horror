@@ -202,6 +202,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.39591, 1.34173, -4.82325)
 [node name="Key" parent="." instance=ExtResource("20_o0b4d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0506897, 2.024353, -1.7550083)
 
+[node name="Item5" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.17604, 2.15, 1.5264482)
+
+[node name="Item6" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.17604, 2.15, 2.0560782)
+
+[node name="Item7" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.61455, 2.15, 1.5264482)
+
+[node name="Item8" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.58767, 2.15, 1.9581782)
+
+[node name="Item9" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.555528, 2.15, -0.0933199)
+
+[node name="Item10" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.555528, 2.15, 0.43631)
+
+[node name="Item11" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.994038, 2.15, -0.0933199)
+
+[node name="Item12" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.967158, 2.15, 0.33841)
+
+[node name="Item13" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.63438, 2.15, 1.5113447)
+
+[node name="Item14" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.63438, 2.15, 2.0409746)
+
+[node name="Item15" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.07289, 2.15, 1.5113447)
+
+[node name="Item16" parent="." instance=ExtResource("11_rgshf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0460095, 2.15, 1.9430746)
+
 [editable path="Podium_Switch/Switch"]
 [editable path="Podium_Wheel/Wheel/Wheel"]
 [editable path="Cube_1kg"]
@@ -212,3 +248,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0506897, 2.024353, -1.75500
 [editable path="Keypad"]
 [editable path="Door"]
 [editable path="Power_Box_WithDoor"]
+[editable path="Item5"]
+[editable path="Item6"]
+[editable path="Item7"]
+[editable path="Item8"]
+[editable path="Item9"]
+[editable path="Item10"]
+[editable path="Item11"]
+[editable path="Item12"]
+[editable path="Item13"]
+[editable path="Item14"]
+[editable path="Item15"]
+[editable path="Item16"]

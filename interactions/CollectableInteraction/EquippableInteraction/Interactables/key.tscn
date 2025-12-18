@@ -65,7 +65,7 @@ item_icon = SubResource("NoiseTexture2D_2ce8s")
 action_data = SubResource("Resource_hwui0")
 metadata/_custom_type_script = "uid://bwybjlc36d0qn"
 
-[node name="Key" type="StaticBody3D"]
+[node name="Key" type="RigidBody3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(50, 0, 0, 0, -2.1855694e-06, 50, 0, -50, -2.1855694e-06, 0, 0, 0)

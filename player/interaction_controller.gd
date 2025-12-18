@@ -31,6 +31,14 @@ var note: Node3D
 
 var is_note_overlay_display: bool = false
 
+var interact_failure_player: AudioStreamPlayer
+var interact_failure_sound_effect: AudioStreamWAV = load("res://assets/sound_effects/key_use_failure.wav")
+var interact_success_player: AudioStreamPlayer
+var interact_success_sound_effect: AudioStreamOggVorbis = load("res://assets/sound_effects/key_use_success.ogg")
+var equip_item_player: AudioStreamPlayer
+var equip_item_sound_effect: AudioStreamOggVorbis = load("res://assets/sound_effects/key_equip.ogg")
+
+
 func _ready() -> void:
 	interactable_check.body_entered.connect(_collectable_item_entered_range)
 	interactable_check.body_exited.connect(_collectable_item_exited_range)
@@ -43,6 +51,20 @@ func _ready() -> void:
 	interacting_reticle.position.y  = get_viewport().size.y / 2 - interacting_reticle.texture.get_size().y / 2
 	use_reticle.position.x  = get_viewport().size.x / 2 - use_reticle.texture.get_size().x / 2
 	use_reticle.position.y  = get_viewport().size.y / 2 - use_reticle.texture.get_size().y / 2
+	
+	interact_failure_player = AudioStreamPlayer.new()
+	interact_failure_player.volume_db = -25.0
+	interact_failure_player.stream = interact_failure_sound_effect
+	add_child(interact_failure_player)
+	interact_success_player = AudioStreamPlayer.new()
+	interact_success_player.volume_db = -10.0
+	interact_success_player.stream = interact_success_sound_effect
+	add_child(interact_success_player)
+	equip_item_player = AudioStreamPlayer.new()
+	equip_item_player.volume_db = -20.0
+	equip_item_player.stream = equip_item_sound_effect
+	add_child(equip_item_player)
+	
 
 func _process(_delta: float) -> void:
 	if inventory_controller.visible == false:
@@ -187,7 +209,14 @@ func on_note_inspected(_note: Node3D):
 	note_content.text = note_interaction_component.content
 	
 func on_item_equipped(item: Node3D):
-		# Reparent Note to the Hand
+	# Rigid bodies behave strangely when equipped.
+	if item is RigidBody3D:
+		item.freeze = true
+		item.linear_velocity = Vector3.ZERO
+		item.angular_velocity = Vector3.ZERO
+		item.gravity_scale = 0.0
+		
+	# Reparent Note to the Hand
 	if item.get_parent() != null:
 		item.get_parent().remove_child(item)
 	else:
@@ -203,6 +232,7 @@ func on_item_equipped(item: Node3D):
 	item.position = Vector3(0.0,0.0,0.0)
 	item.rotation_degrees = Vector3(0,180,-90)
 	item_equipped = true
+	equip_item_player.play()
 	equipped_item = item
 	equipped_item_ic = find_interaction_component(equipped_item)
 	
@@ -253,10 +283,12 @@ func _use_equipped_item() -> void:
 				equipped_item = null
 				item_equipped = false
 			print("item used")
+			interact_success_player.play()
 			return
 		else:
 			# this item can not be used on this interaction
 			print("nothing interesting happens")
+	interact_failure_player.play()
 	inventory_controller.pickup_item(equipped_item_ic.item_data)
 	equipped_item.queue_free()
 	equipped_item = null

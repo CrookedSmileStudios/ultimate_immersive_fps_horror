@@ -29,16 +29,16 @@ func _ready() -> void:
 ## Runs once, when the player FIRST clicks on an object to interact with
 func pre_interact() -> void:
 	super()
-	
-## Run every frame while the player is interacting with this object
-func interact() -> void:
-	super()
-	
+		
 	if not can_interact:
 		return
 	
 	await _play_collect_sound_effect()
 	emit_signal("item_collected", get_parent())
+	
+## Run every frame while the player is interacting with this object
+func interact() -> void:
+	super()
 	
 ## Alternate interaction using secondary button
 func aux_interact() -> void:

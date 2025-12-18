@@ -75,7 +75,7 @@ func aux_interact() -> void:
 		can_interact = true
 
 ## Called 60 frames per second
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	last_velocity = object_ref.linear_velocity
 	
 ## Runs once, when the player LAST interacts with an object
@@ -87,7 +87,7 @@ func set_player_hand_position(hand: Marker3D) -> void:
 	player_hand = hand
 	
 ## Fires when a default object collides with something in the world
-func _fire_collision(node: Node) -> void:
+func _fire_collision(_node: Node) -> void:
 	var impact_strength = (last_velocity - object_ref.linear_velocity).length()
 	if impact_strength > contact_velocity_threshold:
 		_play_collision_sound_effect()

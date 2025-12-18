@@ -22,6 +22,7 @@ corner_radius_bottom_left = 3
 [node name="InventoryController" type="Node"]
 
 [node name="InventoryUI" type="Control" parent="." node_paths=PackedStringArray("inventory_grid")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +30,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hngwd")
-item_slots_count = null
 inventory_grid = NodePath("Panel/MarginContainer/GridContainer")
 
 [node name="Panel" type="Panel" parent="InventoryUI"]
