@@ -41,7 +41,6 @@ text = "BACK"
 
 [node name="DoorInteraction" parent="Door/PivotPoint/Door" node_paths=PackedStringArray("pivot_point") instance=ExtResource("2_db48h")]
 pivot_point = NodePath("../..")
-flip_pivot = false
 maximum_rotation = 150.0
 
 [node name="Door2" type="Node3D" parent="."]
@@ -72,4 +71,5 @@ text = "BACK"
 
 [node name="DoorInteraction" parent="Door2/PivotPoint/Door" node_paths=PackedStringArray("pivot_point") instance=ExtResource("2_db48h")]
 pivot_point = NodePath("../..")
+flip_pivot = true
 maximum_rotation = 150.0

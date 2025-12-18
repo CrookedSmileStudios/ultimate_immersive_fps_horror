@@ -1,22 +1,24 @@
-[gd_scene load_steps=27 format=3 uid="uid://8n8svovtgrsr"]
+[gd_scene load_steps=29 format=3 uid="uid://8n8svovtgrsr"]
 
 [ext_resource type="Texture2D" uid="uid://o2n1nqo1yahd" path="res://assets/kenney_protoype_textures/PNG/Dark/texture_13.png" id="1_whpuv"]
 [ext_resource type="Texture2D" uid="uid://dv8x0y75pmtma" path="res://assets/kenney_protoype_textures/PNG/Light/texture_13.png" id="2_85hcc"]
 [ext_resource type="PackedScene" uid="uid://luy7w0qfph84" path="res://player/player.tscn" id="3_85hcc"]
-[ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://interactions/InspectableInteraction/Interactables/note_run.tscn" id="3_h3ryc"]
-[ext_resource type="PackedScene" uid="uid://bfxxin08cd2er" path="res://interactions/InspectableInteraction/Interactables/note_text.tscn" id="4_ubtly"]
+[ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://interactions/CollectableInteraction/InspectableInteraction/Interactables/note_run.tscn" id="3_h3ryc"]
+[ext_resource type="PackedScene" uid="uid://bfxxin08cd2er" path="res://interactions/CollectableInteraction/InspectableInteraction/Interactables/note_text.tscn" id="4_ubtly"]
 [ext_resource type="PackedScene" uid="uid://cprcy3ipbbl73" path="res://interactions/RotatableInteraction/SwitchInteraction/Interactables/switch.tscn" id="7_ubtly"]
 [ext_resource type="PackedScene" uid="uid://dudqqo5it1iuy" path="res://interactions/RotatableInteraction/WheelInteraction/Interactables/wheel.tscn" id="8_gtt2g"]
+[ext_resource type="AudioStream" uid="uid://d2cs8q0fvfc47" path="res://assets/sound_effects/lever_pull.ogg" id="8_yn25f"]
 [ext_resource type="Script" uid="uid://b835bm63huqus" path="res://scripts/OldScripts/light.gd" id="9_50mym"]
 [ext_resource type="AudioStream" uid="uid://cmnb1j6kcmnog" path="res://assets/sound_effects/wheel_spin.ogg" id="9_gtt2g"]
 [ext_resource type="Script" uid="uid://3b0mfmma4m02" path="res://scripts/OldScripts/bridge.gd" id="9_jpsdj"]
 [ext_resource type="PackedScene" uid="uid://dxo43pwgdu1p5" path="res://interactions/GrabbableInteraction/Interactables/cube_1_kg.tscn" id="10_h8jws"]
-[ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://interactions/CollectableInteraction/Interactables/item.tscn" id="11_rgshf"]
+[ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://interactions/CollectableInteraction/ConsumableInteraction/Interactables/item.tscn" id="11_rgshf"]
 [ext_resource type="PackedScene" uid="uid://dhifhdp582mcf" path="res://interactions/RotatableInteraction/DoorInteraction/Interactables/door.tscn" id="14_h3ryc"]
 [ext_resource type="AudioStream" uid="uid://bvbk4xjx711wx" path="res://assets/sound_effects/DoorCreak.ogg" id="15_ubtly"]
 [ext_resource type="PackedScene" uid="uid://de5xesms0vw07" path="res://interactions/RotatableInteraction/DoorInteraction/Interactables/double_door.tscn" id="17_e5k14"]
 [ext_resource type="PackedScene" uid="uid://cucux2geb02js" path="res://interactions/RotatableInteraction/DoorInteraction/Interactables/power_box_with_door.tscn" id="18_smb53"]
 [ext_resource type="PackedScene" uid="uid://bm3cd6n1t8n74" path="res://interactions/GrabbableInteraction/Interactables/battery.tscn" id="19_hk7wi"]
+[ext_resource type="PackedScene" uid="uid://33x7q472wub8" path="res://interactions/CollectableInteraction/EquippableInteraction/Interactables/key.tscn" id="20_o0b4d"]
 [ext_resource type="PackedScene" uid="uid://cs7dsiexgq6ls" path="res://interactions/TypeableInteraction/Interactables/keypad.tscn" id="21_yn25f"]
 [ext_resource type="PackedScene" uid="uid://nv6su48cqvpq" path="res://interactions/GrabbableInteraction/Interactables/cube_5_kg.tscn" id="23_2gvps"]
 
@@ -113,6 +115,7 @@ script = ExtResource("9_50mym")
 transform = Transform3D(0.866025, -0.5, -2.34249e-08, 0.5, 0.866025, 8.7423e-08, -2.34249e-08, -8.7423e-08, 1, -0.489976, 0.451452, 0)
 
 [node name="SwitchInteraction" parent="Podium_Switch/Switch/Switch" index="2" node_paths=PackedStringArray("nodes_to_affect")]
+movement_sound = ExtResource("8_yn25f")
 nodes_to_affect = [NodePath("../../../SpotLight3D")]
 
 [node name="Podium_Wheel" type="CSGBox3D" parent="."]
@@ -178,9 +181,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.21484, 1.5, -1.76593)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.836045, 1, 4.07901)
 
 [node name="DoorInteraction" parent="Door/PivotPoint/Door" index="4"]
-is_locked = false
 movement_sound = ExtResource("15_ubtly")
-maximum_rotation = 120.0
+maximum_rotation = -150.0
 
 [node name="DoubleDoor" parent="." instance=ExtResource("17_e5k14")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.66184, 1, 10.9814)
@@ -188,11 +190,17 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.661
 [node name="Power_Box_WithDoor" parent="." instance=ExtResource("18_smb53")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -4.36794, 1.06583, -6.18618)
 
+[node name="DoorInteraction" parent="Power_Box_WithDoor/PivotPoint/Door" index="2"]
+flip_pivot = true
+
 [node name="OmniLight3D" parent="Power_Box_WithDoor/Light bulb" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.9968, 0)
 
 [node name="Battery" parent="." instance=ExtResource("19_hk7wi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.39591, 1.34173, -4.82325)
+
+[node name="Key" parent="." instance=ExtResource("20_o0b4d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0506897, 2.024353, -1.7550083)
 
 [editable path="Podium_Switch/Switch"]
 [editable path="Podium_Wheel/Wheel/Wheel"]

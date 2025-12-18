@@ -40,5 +40,4 @@ text = "BACK"
 [node name="DoorInteraction" parent="PivotPoint/Door" node_paths=PackedStringArray("pivot_point") instance=ExtResource("2_5mvhp")]
 pivot_point = NodePath("../..")
 is_locked = true
-flip_pivot = false
 maximum_rotation = 150.0

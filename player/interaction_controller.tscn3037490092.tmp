@@ -1,0 +1,27 @@
+[gd_scene load_steps=9 format=3 uid="uid://bnvad8jy4rflu"]
+
+[ext_resource type="Script" uid="uid://cqo0gj56vdomk" path="res://player/interaction_controller.gd" id="1_uu2g2"]
+[ext_resource type="Script" uid="uid://bwybjlc36d0qn" path="res://inventory/item_data.gd" id="2_dy0wp"]
+[ext_resource type="Texture2D" uid="uid://ijh1jejharmw" path="res://interactions/CollectableInteraction/Interactables/default_icon.png" id="3_dy0wp"]
+[ext_resource type="PackedScene" uid="uid://blpg3l8h2pa1u" path="res://interactions/CollectableInteraction/Interactables/item.tscn" id="4_e0t2s"]
+[ext_resource type="Texture2D" uid="uid://b5d4hcb3lwux5" path="res://interactions/InspectableInteraction/Interactables/RunNoteIcon.png" id="5_e0t2s"]
+[ext_resource type="PackedScene" uid="uid://dlyxujkbtsmnm" path="res://interactions/InspectableInteraction/Interactables/note_run.tscn" id="6_4857m"]
+
+[sub_resource type="Resource" id="Resource_d3e7k"]
+script = ExtResource("2_dy0wp")
+item_name = "Deafult"
+item_icon = ExtResource("3_dy0wp")
+item_model_prefab = ExtResource("4_e0t2s")
+metadata/_custom_type_script = "uid://bwybjlc36d0qn"
+
+[sub_resource type="Resource" id="Resource_52l78"]
+script = ExtResource("2_dy0wp")
+item_name = "Note1"
+item_type = 1
+item_icon = ExtResource("5_e0t2s")
+item_model_prefab = ExtResource("6_4857m")
+metadata/_custom_type_script = "uid://bwybjlc36d0qn"
+
+[node name="InteractionController" type="Node"]
+script = ExtResource("1_uu2g2")
+item_types = Array[ExtResource("2_dy0wp")]([SubResource("Resource_d3e7k"), SubResource("Resource_52l78")])

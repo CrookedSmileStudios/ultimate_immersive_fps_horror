@@ -269,6 +269,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("9_2ieo8")
+item_slots_count = null
 inventory_grid = NodePath("Panel/MarginContainer/GridContainer")
 
 [node name="Panel" type="Panel" parent="InventoryController/InventoryUI"]

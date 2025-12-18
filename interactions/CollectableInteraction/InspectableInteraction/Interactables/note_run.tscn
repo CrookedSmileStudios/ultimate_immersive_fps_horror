@@ -1,0 +1,45 @@
+[gd_scene load_steps=12 format=3 uid="uid://dlyxujkbtsmnm"]
+
+[ext_resource type="Texture2D" uid="uid://b1nngl0iobrqo" path="res://assets/notes/RUN.png" id="1_88qo3"]
+[ext_resource type="PackedScene" uid="uid://fq0vsj4an3fg" path="res://interactions/CollectableInteraction/InspectableInteraction/inspectable_interation.tscn" id="2_gb2pc"]
+[ext_resource type="Script" uid="uid://f2wketpesmgt" path="res://inventory/actions/inspectable_action.gd" id="3_0gwsi"]
+[ext_resource type="AudioStream" uid="uid://bwdix3aa54how" path="res://assets/sound_effects/drawKnife2.ogg" id="3_qt2sb"]
+[ext_resource type="Texture2D" uid="uid://b5d4hcb3lwux5" path="res://interactions/CollectableInteraction/InspectableInteraction/Interactables/RunNoteIcon.png" id="5_bcii2"]
+[ext_resource type="Script" uid="uid://bwybjlc36d0qn" path="res://inventory/item_data.gd" id="6_8pqna"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_m063h"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m063h"]
+transparency = 1
+albedo_texture = ExtResource("1_88qo3")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_88qo3"]
+size = Vector3(2.2, 0.3, 3)
+
+[sub_resource type="Resource" id="Resource_lnvm1"]
+script = ExtResource("3_0gwsi")
+metadata/_custom_type_script = "uid://f2wketpesmgt"
+
+[sub_resource type="Resource" id="Resource_84rrj"]
+script = ExtResource("6_8pqna")
+item_name = "note1"
+item_icon = ExtResource("5_bcii2")
+action_data = SubResource("Resource_lnvm1")
+metadata/_custom_type_script = "uid://bwybjlc36d0qn"
+
+[node name="RunNote" type="StaticBody3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.112, 0, 0, 0, 1.536, 0, 0, 0, 1.536, 0, 0, 0)
+mesh = SubResource("PlaneMesh_m063h")
+surface_material_override/0 = SubResource("StandardMaterial3D_m063h")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0168457, 0, -0.00854492)
+shape = SubResource("BoxShape3D_88qo3")
+
+[node name="InspectableInteration" parent="." instance=ExtResource("2_gb2pc")]
+content = "RUN!"
+collect_sound_effect = ExtResource("3_qt2sb")
+item_data = SubResource("Resource_84rrj")

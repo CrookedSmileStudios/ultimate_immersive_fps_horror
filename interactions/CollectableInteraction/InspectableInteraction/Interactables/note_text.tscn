@@ -1,7 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bfxxin08cd2er"]
+[gd_scene load_steps=12 format=3 uid="uid://bfxxin08cd2er"]
 
 [ext_resource type="Texture2D" uid="uid://gu5e6tomjfwi" path="res://assets/notes/DIARY.png" id="1_qlwxl"]
-[ext_resource type="PackedScene" uid="uid://fq0vsj4an3fg" path="res://interactions/InspectableInteraction/inspectable_interation.tscn" id="2_un6hu"]
+[ext_resource type="PackedScene" uid="uid://fq0vsj4an3fg" path="res://interactions/CollectableInteraction/InspectableInteraction/inspectable_interation.tscn" id="2_un6hu"]
+[ext_resource type="Script" uid="uid://f2wketpesmgt" path="res://inventory/actions/inspectable_action.gd" id="3_j1ep7"]
+[ext_resource type="AudioStream" uid="uid://bwdix3aa54how" path="res://assets/sound_effects/drawKnife2.ogg" id="3_mfcmu"]
+[ext_resource type="Texture2D" uid="uid://cudl4s75lv7wc" path="res://interactions/CollectableInteraction/InspectableInteraction/Interactables/DiaryNoteIcon.png" id="4_kyqpj"]
+[ext_resource type="Script" uid="uid://bwybjlc36d0qn" path="res://inventory/item_data.gd" id="5_mfcmu"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_e5cn3"]
 
@@ -11,6 +15,17 @@ albedo_texture = ExtResource("1_qlwxl")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e4pb6"]
 size = Vector3(2.2, 0.3, 3)
+
+[sub_resource type="Resource" id="Resource_lnvm1"]
+script = ExtResource("3_j1ep7")
+metadata/_custom_type_script = "uid://f2wketpesmgt"
+
+[sub_resource type="Resource" id="Resource_xxkht"]
+script = ExtResource("5_mfcmu")
+item_name = "note2"
+item_icon = ExtResource("4_kyqpj")
+action_data = SubResource("Resource_lnvm1")
+metadata/_custom_type_script = "uid://bwybjlc36d0qn"
 
 [node name="Text_Note" type="StaticBody3D"]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
@@ -26,3 +41,5 @@ shape = SubResource("BoxShape3D_e4pb6")
 
 [node name="InspectableInteration" parent="." instance=ExtResource("2_un6hu")]
 content = "U.S. ARMY FIELD OPERATIONS REPORT\\nWHITLOW RELAY SECTOR – ALASKAN COMMAND\\n17 JANUARY 1953\\nTYPEWRITTEN – URGENT\\n\\nTO: COMMAND HQ, FT. RICHARDSON\\nFROM: LT. R. MERCER, ACTING FIELD COMMANDER\\nRE: SITUATION UPDATE – WHITLOW RELAY\\n\\nSir,\\n\\nThis is a field report on the ongoing situation at Whitlow Relay. Communications remain severely limited following the antenna damage sustained during the storm on the 14th. The ice shear fractured the primary mast, and we’ve only managed partial outbound contact using the backup SCR-399 unit. Signal strength is weak, and any attempts to reach Command beyond twelve miles have been unsuccessful.\\n\\nAs of this morning at 0430 hours, Private Henley has gone missing. There are no signs of forced entry or tracks beyond the perimeter fence. A full sweep of the grounds was conducted despite low visibility due to whiteout conditions. Thus far, no trace of the soldier has been found.\\n\\nSupplies are holding at roughly sixty-five percent. However, the southern fuel tank appears to be leaking, and our reserves are draining more quickly than forecast. Power output from the generator has become unreliable, with routine brownouts reported in both Barrack Two and the Operations Shed each night.\\n\\nWe’ve been under near-continuous blizzard conditions for thirty-six hours. Ice accumulation is now exceeding three inches on most structures, further stressing already compromised equipment. Air support remains impossible under current conditions.\\n\\nMorale among the men is deteriorating. Several have reported disturbances during the night watch—descriptions include metallic scraping and what one referred to as “voices beneath the wind.” No physical evidence has been found to support these claims, but the reports are becoming more frequent. I recommend psychological assessments be conducted once the unit is rotated out.\\n\\nGiven the mounting concerns, I strongly advise immediate resupply by air drop if ground transport is not viable. Requesting authorization to initiate defensive lockdown protocol until relief or replacement can be arranged.\\n\\nRespectfully,\\nLT. R. MERCER\\nU.S. ARMY SIGNAL CORPS\\n"
+collect_sound_effect = ExtResource("3_mfcmu")
+item_data = SubResource("Resource_xxkht")

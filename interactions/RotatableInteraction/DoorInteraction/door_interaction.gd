@@ -24,9 +24,8 @@ Use this class for standard hinged doors that open on a pivot.
 @export var is_locked: bool = false
 
 ## True if the pivot is on the right side of the door, the movement rotation should flip
-@export var flip_pivot: bool = true
+@export var flip_pivot: bool = false
 
-## If true, reverses the mouse input direction for opening/closing the door
 @export var reverse_input_direction: bool = false
 
 ## Sound effect to play when the door shuts
@@ -139,9 +138,11 @@ func _process(delta: float) -> void:
 	
 	# If the door was previosuly opened and the player is now shutting it
 	if door_opened and abs(current_angle - starting_rotation) < shut_snap_range:
-		shut_audio_player.volume_db = -8.0
-		shut_audio_player.play()
+		allow_movement_sound = false
+		angular_velocity = 0.0
 		movement_audio_player.stop()
+		shut_audio_player.stop()
+		shut_audio_player.play()
 		door_opened = false
 
 ## Called every frame the player is giving input to the door (moving the mouse)
@@ -149,13 +150,14 @@ func _input(event: InputEvent) -> void:
 	if is_interacting:
 		if event is InputEventMouseMotion:
 			input_active = true
+			allow_movement_sound = true
 			var delta: float = -event.relative.y * 0.001
 			if not is_front:
 				delta = -delta
 			if flip_pivot:
 				delta = -delta  # flip input for pivot being on bottom right
 			if reverse_input_direction:
-				delta = -delta  # invert input for push/pull reversal
+				delta = -delta
 				
 			# Simulate resistance to small motions
 			if abs(delta) < 0.01:
@@ -182,6 +184,18 @@ func unlock() -> void:
 
 ## Plays the secondary impact sound effect or the door shutting
 func _play_door_shut_sound(volume_db: float = 0.0) -> void:
+	allow_movement_sound = false
+
+	angular_velocity = 0.0
+
+	movement_audio_player.stop()
 	shut_audio_player.stop()
 	shut_audio_player.volume_db = volume_db
 	shut_audio_player.play()
+
+func use_item(action: ActionData) -> bool:
+	if action.item_name == "special_key":
+		is_locked = false
+		return true
+	else:
+		return false

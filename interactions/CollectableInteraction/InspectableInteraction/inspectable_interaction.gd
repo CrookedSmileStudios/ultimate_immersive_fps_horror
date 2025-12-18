@@ -1,5 +1,5 @@
 class_name InspectableInteraction
-extends AbstractInteraction
+extends CollectableInteraction
 
 """
 InspectableInteraction handles objects that the player can pick up and examine, such as notes or documents.  
@@ -15,25 +15,24 @@ with without immediately adding it to their inventory.
 
 ## Text content for a note
 @export var content: String
-## Sound effect to play when the player picks up this object to inspect
-@export var pickup_sound_effect: AudioStreamOggVorbis = preload("res://assets/sound_effects/drawKnife2.ogg")
-var pickup_audio_player: AudioStreamPlayer3D
 
 ## Sound effect to play when the player puts this object away to be done inspecting
 @export var put_away_sound_effect: AudioStreamOggVorbis = preload("res://assets/sound_effects/drawKnife3.ogg")
 
 ## Notify the player that this is being picked up to be inspected
-signal note_collected(note: Node3D)
+signal note_inspected(note: Node3D)
 
 
 ## Runs once, after the node and all its children have entered the scene tree and are ready
 func _ready() -> void:
 	super()
 	# Initialize Audio
-	pickup_audio_player = AudioStreamPlayer3D.new()
-	pickup_audio_player.stream = pickup_sound_effect
-	add_child(pickup_audio_player)
-	
+	collect_audio_player = AudioStreamPlayer3D.new()
+	collect_sound_effect = load("res://assets/sound_effects/drawKnife2.ogg")
+	# TODO: Make this spawn where the item is being picked up from
+	collect_audio_player.stream = collect_sound_effect
+	add_child(collect_audio_player)
+
 	# Replace newline characters to ensure formatting displays as expected
 	content = content.replace("\\n", "\n")
 
@@ -44,7 +43,7 @@ func pre_interact() -> void:
 ## Run every frame while the player is interacting with this object
 func interact() -> void:
 	super()
-	
+		
 	if not can_interact:
 		return
 		
@@ -58,8 +57,8 @@ func interact() -> void:
 	if col:
 		col.get_parent().remove_child(col)
 		col.queue_free()
-	_play_pickup_sound_effect()
-	emit_signal("note_collected", get_parent())
+	_play_collect_sound_effect()
+	emit_signal("note_inspected", get_parent())
 	
 ## Alternate interaction using secondary button
 func aux_interact() -> void:
@@ -68,13 +67,3 @@ func aux_interact() -> void:
 ## Runs once, when the player LAST interacts with an object
 func post_interact() -> void:
 	super()
-	
-## Play the pickup to inspect sound effect
-func _play_pickup_sound_effect() -> void:
-	pickup_audio_player.play()
-	
-	# The inspectable is in the players hand, we dont want a strange situation where the player can still
-	# interact with the object in this code.
-	self.can_interact = false
-	
-	await pickup_audio_player.finished

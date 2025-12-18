@@ -76,6 +76,7 @@ func post_interact() -> void:
 	wheel_kickback = -wheel_kick_intensity
 	
 func _process(delta: float) -> void:
+	allow_movement_sound = true
 	if is_interacting:
 		_play_movement_sounds(delta)
 	else:

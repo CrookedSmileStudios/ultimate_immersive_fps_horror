@@ -1,0 +1,46 @@
+[gd_scene load_steps=11 format=3 uid="uid://blpg3l8h2pa1u"]
+
+[ext_resource type="PackedScene" uid="uid://8k6p0eg7gmtf" path="res://interactions/CollectableInteraction/ConsumableInteraction/consumable_interaction.tscn" id="1_5s7lb"]
+[ext_resource type="AudioStream" uid="uid://dkfquhn7txsbi" path="res://assets/sound_effects/handleCoins2.ogg" id="2_dh37l"]
+[ext_resource type="Script" uid="uid://duxmt688kpypd" path="res://inventory/actions/consumable_action.gd" id="2_i0oxr"]
+[ext_resource type="Texture2D" uid="uid://ijh1jejharmw" path="res://interactions/CollectableInteraction/ConsumableInteraction/Interactables/default_icon.png" id="4_w2twc"]
+[ext_resource type="Script" uid="uid://bwybjlc36d0qn" path="res://inventory/item_data.gd" id="5_brxhg"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nfg8c"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e8v2r"]
+albedo_color = Color(0.533037, 0.533037, 0.533037, 1)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vi0cm"]
+height = 0.3
+radius = 0.1
+
+[sub_resource type="Resource" id="Resource_w2twc"]
+script = ExtResource("2_i0oxr")
+modifier_name = "sanity"
+modifier_value = -100
+metadata/_custom_type_script = "uid://duxmt688kpypd"
+
+[sub_resource type="Resource" id="Resource_eela7"]
+script = ExtResource("5_brxhg")
+item_name = "default"
+item_icon = ExtResource("4_w2twc")
+action_data = SubResource("Resource_w2twc")
+metadata/_custom_type_script = "uid://bwybjlc36d0qn"
+
+[node name="Item" type="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_nfg8c")
+surface_material_override/0 = SubResource("StandardMaterial3D_e8v2r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_vi0cm")
+
+[node name="ConsumableInteraction" parent="." instance=ExtResource("1_5s7lb")]
+collect_sound_effect = ExtResource("2_dh37l")
+item_data = SubResource("Resource_eela7")

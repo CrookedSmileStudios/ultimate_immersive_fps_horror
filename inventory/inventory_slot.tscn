@@ -1,0 +1,96 @@
+[gd_scene load_steps=6 format=3 uid="uid://dahkohb6xore3"]
+
+[ext_resource type="Script" uid="uid://xc7f7180kanw" path="res://inventory/inventory_slot.gd" id="1_refl1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5e80m"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.04293129, 0.052068003, 0.07188099, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.8, 0)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_refl1"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.043137256, 0.050980393, 0.07058824, 0.87058824)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nsnbm"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.04293129, 0.052068003, 0.07188099, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22dgf"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[node name="InventorySlot" type="Button" node_paths=PackedStringArray("icon_slot")]
+custom_minimum_size = Vector2(66, 66)
+offset_right = 8.0
+offset_bottom = 8.0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_5e80m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_refl1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_nsnbm")
+theme_override_styles/focus = SubResource("StyleBoxFlat_22dgf")
+script = ExtResource("1_refl1")
+icon_slot = NodePath("TextureRect")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 65.0
+offset_bottom = 65.0
+expand_mode = 1

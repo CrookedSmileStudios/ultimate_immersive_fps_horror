@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://8k6p0eg7gmtf"]
+
+[ext_resource type="Script" uid="uid://dustr3xef41hb" path="res://interactions/CollectableInteraction/ConsumableInteraction/consumable_interaction.gd" id="1_1yk8d"]
+
+[node name="CollectableInteraction" type="Node"]
+script = ExtResource("1_1yk8d")

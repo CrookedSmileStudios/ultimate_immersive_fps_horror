@@ -41,6 +41,8 @@ var volume_scale: float
 ## How smooth the rotatable object rotates
 var smoothing_coefficient: float
 
+var allow_movement_sound: bool = false
+
 ## True if the player is interacting with the object. Can't be replaced with the defualt 
 ## is_interacting because this is manually tracked across frames so we can determine if
 ## the player was interacting on the previous frame
@@ -85,7 +87,7 @@ func get_rotation_percentage() -> float:
 ## Plays the main movement sound effect and adjusts its volume over time
 func _play_movement_sounds(delta: float) -> void:
 	# Velocity determines souhnd level. Sound level must be positive, even if the true velocity is negative
-	var velocity = abs(angular_velocity)
+	var velocity = abs(current_angle - previous_angle)
 	
 	# Only make sound if velocity passes threshold
 	var target_volume: float = 0.0
@@ -109,12 +111,13 @@ func _play_movement_sounds(delta: float) -> void:
 			
 ## Forces movement sound to fade out quickly
 func _stop_movement_sounds(delta: float) -> void:
-	if movement_audio_player and movement_audio_player.playing:
-		var current_vol = db_to_linear(movement_audio_player.volume_db)
-		var new_vol = lerp(current_vol, 0.0, delta * fade_speed)
-		movement_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.0))
+	if allow_movement_sound:
+		if movement_audio_player and movement_audio_player.playing:
+			var current_vol = db_to_linear(movement_audio_player.volume_db)
+			var new_vol = lerp(current_vol, 0.0, delta * fade_speed)
+			movement_audio_player.volume_db = linear_to_db(clamp(new_vol, 0.0, 1.0))
 
-		# Stop completely once inaudible
-		if new_vol < 0.001:
-			movement_audio_player.stop()
+			# Stop completely once inaudible
+			if new_vol < 0.001:
+				movement_audio_player.stop()
 			

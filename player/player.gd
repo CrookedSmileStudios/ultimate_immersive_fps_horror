@@ -15,6 +15,10 @@ extends CharacterBody3D
 @onready var note_hand: Marker3D = %NoteHand
 @export var note_sway_amount: float = .1
 
+# Item hand variables
+@onready var item_hand: Marker3D = %ItemHand
+var item_hand_rest_position: Vector3
+
 # Movement Variables
 const walking_speed: float = 3.0
 const sprinting_speed: float = 5.0
@@ -67,11 +71,15 @@ var lean_speed: float = 8.0                 # How quickly to lerp between states
 var target_lean: float = 0.0                        # -1 = left, 1 = right, 0 = neutral
 var current_lean: float = 0.0
 
-# Sanity Vars
-var light_level: float = 0.0
+# Inventory Vars
+@onready var inventory_controller: InventoryController = %InventoryController/InventoryUI
+@onready var interaction_raycast: RayCast3D = %InteractionRaycast
+
+
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	item_hand_rest_position = item_hand.position
 	
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("quit"):
@@ -84,12 +92,22 @@ func _input(event: InputEvent) -> void:
 	else:
 		target_lean = 0.0	
 		
-	if event is InputEventMouseMotion:
-		if current_sensitivity > 0.01 and not interaction_controller.isCameraLocked():
-			mouse_input = event.relative
-			rotate_y(deg_to_rad(-mouse_input.x * current_sensitivity))
-			head.rotate_x(deg_to_rad(-mouse_input.y * current_sensitivity))
-			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-85), deg_to_rad(85))
+		
+	if Input.is_action_pressed("inventory"):
+		inventory_controller.visible = true
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		interaction_raycast.enabled = false
+	else:
+		inventory_controller.visible = false
+		interaction_raycast.enabled = true
+		if not interaction_controller.current_object:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		if event is InputEventMouseMotion:
+			if current_sensitivity > 0.01 and not interaction_controller.isCameraLocked():
+				mouse_input = event.relative
+				rotate_y(deg_to_rad(-mouse_input.x * current_sensitivity))
+				head.rotate_x(deg_to_rad(-mouse_input.y * current_sensitivity))
+				head.rotation.x = clamp(head.rotation.x, deg_to_rad(-85), deg_to_rad(85))
 	
 func _physics_process(delta: float) -> void:
 	
@@ -123,7 +141,7 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, current_speed)
 			
 	move_and_slide()
-	note_tilt_and_sway(input_dir, delta)
+	note_tilt_and_sway(delta)
 
 func _process(delta: float) -> void:
 	# If we just unlocked camera, slowly bring sensitivity back to normal levels
@@ -227,10 +245,13 @@ func set_camera_locked(locked: bool) -> void:
 	else:
 		sensitivity_fading_in = true
 
-func note_tilt_and_sway(input_dir: Vector2, delta: float) -> void:
+func note_tilt_and_sway(delta: float) -> void:
 	if note_hand:
 		note_hand.rotation.z = lerp(note_hand.rotation.z, -input_dir.x * note_sway_amount, 10 * delta)
 		note_hand.rotation.x = lerp(note_hand.rotation.x, -input_dir.y * note_sway_amount, 10 * delta)
+	if item_hand:
+		item_hand.rotation.z = lerp(item_hand.rotation.z, -input_dir.x * note_sway_amount*2, 10 * delta)
+		item_hand.rotation.x = lerp(item_hand.rotation.x, -input_dir.y * note_sway_amount*2, 10 * delta)
 
 func play_footsteps() -> void:
 	if moving and is_on_floor():

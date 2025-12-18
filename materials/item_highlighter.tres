@@ -6,7 +6,7 @@
 render_priority = 0
 shader = ExtResource("1_re0c6")
 shader_parameter/shine_color = Color(1, 1, 1, 1)
-shader_parameter/cycle_interval = 1.0
-shader_parameter/shine_speed = 3.0
+shader_parameter/cycle_interval = 2.00000007125
+shader_parameter/shine_speed = 2.0000000475
 shader_parameter/shine_width = 3.0
 shader_parameter/shine_direction = Vector3(0, 0, 1)

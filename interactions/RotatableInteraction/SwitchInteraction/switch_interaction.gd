@@ -83,7 +83,8 @@ func post_interact() -> void:
 		is_switch_snapping = true
 	
 func _process(delta: float) -> void:
-
+	previous_angle = current_angle
+	allow_movement_sound = true
 	if is_interacting:
 		_play_movement_sounds(delta)
 		
@@ -118,7 +119,7 @@ func _process(delta: float) -> void:
 	# Keep track of angle data for movement sound code
 	current_angle = object_ref.rotation.z
 	angular_velocity = current_angle - previous_angle
-	previous_angle = current_angle
+	#previous_angle = current_angle
 	
 
 ## Called every frame the player is giving input to the door (moving the mouse)
