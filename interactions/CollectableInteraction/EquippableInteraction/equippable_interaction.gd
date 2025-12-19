@@ -33,12 +33,12 @@ func pre_interact() -> void:
 ## Run every frame while the player is interacting with this object
 func interact() -> void:
 	super()
-	
+		
 	if not can_interact:
 		return
 	
-	await _play_collect_sound_effect()
 	emit_signal("item_collected", get_parent())
+	_play_collect_sound_effect()
 	
 ## Alternate interaction using secondary button
 func aux_interact() -> void:
@@ -46,6 +46,5 @@ func aux_interact() -> void:
 	
 ## Runs once, when the player LAST interacts with an object
 func post_interact() -> void:
-	get_parent().visible = false
 	super()
 	

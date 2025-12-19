@@ -1,5 +1,5 @@
 extends Resource
 class_name ActionData
 
-enum ActionType { CONSUMABLE, EQUIPPABLE, INSPECTABLE }
+enum ActionType { INVALID, CONSUMABLE, EQUIPPABLE, INSPECTABLE }
 var action_type: ActionType

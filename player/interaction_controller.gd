@@ -91,7 +91,11 @@ func _process(_delta: float) -> void:
 					current_object = null
 					_unfocus()
 				elif Input.is_action_pressed("primary"):
-					interaction_component.interact()
+					if not interaction_component is CollectableInteraction or not inventory_controller.inventory_full:
+						interaction_component.interact()
+					else:
+						if not interact_failure_player.playing:
+							interact_failure_player.play()
 				else:
 					interaction_component.post_interact()
 					current_object = null 
@@ -120,7 +124,7 @@ func _process(_delta: float) -> void:
 						if interaction_component is GrabbableInteraction:
 							interaction_component.set_player_hand_position(hand)
 				
-						if interaction_component is ConsumableInteraction:
+						if interaction_component is ConsumableInteraction or interaction_component is EquippableInteraction:
 							if not interaction_component.is_connected("item_collected", Callable(self, "_on_item_collected")):
 								interaction_component.connect("item_collected", Callable(self, "_on_item_collected"))
 							
@@ -180,8 +184,10 @@ func _unfocus() -> void:
 
 ## Called when the player collects an item
 func _on_item_collected(item: Node):
+	item.visible = false
 	var ic = find_interaction_component(item)
 	_add_item_to_inventory(ic.item_data)
+	await ic.collect_audio_player.finished
 	item.queue_free()
 	
 func on_note_inspected(_note: Node3D):
@@ -235,6 +241,7 @@ func on_item_equipped(item: Node3D):
 	equip_item_player.play()
 	equipped_item = item
 	equipped_item_ic = find_interaction_component(equipped_item)
+	print(equipped_item_ic.item_data.item_name)
 	
 		
 func _on_note_collected():
@@ -260,25 +267,24 @@ func _add_item_to_inventory(item_data: ItemData):
 func _collectable_item_entered_range(body: Node3D) -> void:
 	if body.name != "Player":
 		var ic: AbstractInteraction = find_interaction_component(body)
-		if ic and ic is ConsumableInteraction:
+		if ic and ic is ConsumableInteraction or ic is EquippableInteraction:
 			var mesh: MeshInstance3D = body.find_child("MeshInstance3D", true, false)
 			if mesh:
-				mesh.material_overlay = outline_material	
+				mesh.material_overlay = outline_material
 
 ## Called when a collectable item is NO LONGER within range of the player
 func _collectable_item_exited_range(body: Node3D) -> void:
 	if body.name != "Player":
 		var ic: AbstractInteraction = find_interaction_component(body)
-		if ic and ic is ConsumableInteraction:
+		if ic and ic is ConsumableInteraction or ic is EquippableInteraction:
 			var mesh: MeshInstance3D = body.find_child("MeshInstance3D", true, false)
 			if mesh:
 				mesh.material_overlay = null
 				
 func _use_equipped_item() -> void:
 	if potential_object:
-		var action_data: ActionData = equipped_item_ic.item_data.action_data
-		if interaction_component.use_item(action_data):
-			if action_data.one_time_use:
+		if interaction_component.use_item(equipped_item_ic.item_data):
+			if equipped_item_ic.item_data.action_data.one_time_use:
 				equipped_item.queue_free()
 				equipped_item = null
 				item_equipped = false

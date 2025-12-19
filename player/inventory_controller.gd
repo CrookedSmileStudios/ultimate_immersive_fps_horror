@@ -14,6 +14,7 @@ var swap_slot_player: AudioStreamPlayer
 var swap_slot_sound_effect: AudioStreamOggVorbis = load("res://assets/sound_effects/menu_swap.ogg")
 
 var inventory_slots: Array[InventorySlot] = []
+var inventory_full: bool = false 
 
 func _ready():
 	swap_slot_player = AudioStreamPlayer.new()
@@ -37,12 +38,19 @@ func _ready():
 # ----------------------
 # Pickup / Drag & Drop
 # ----------------------
+func has_free_slot() -> bool:
+	for slot in inventory_slots:
+		if slot.slot_data == null:
+			return true
+	return false
+	
 func pickup_item(item: ItemData) -> void:
 	for slot in inventory_slots:
 		if not slot.slot_filled:
-			slot.fill_slot(item)
+			slot.fill_slot(item)	
+			inventory_full = not has_free_slot()
 			return
-	# TODO: handle inventory full case
+	inventory_full = true
 
 func _on_item_swapped_on_slot(from_slot_id: int, to_slot_id: int) -> void:
 	var to_slot_item = inventory_slots[to_slot_id].slot_data
@@ -59,12 +67,11 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	var slot := inventory_slots[data["ID"]]
 	if slot.slot_data == null:
 		return false
-	# Only CONSUMABLE or EQUIPPABLE (items that can be dropped) can leave inventory
-	var action_type = slot.slot_data.action_data.action_type
-	return action_type == ActionData.ActionType.CONSUMABLE or action_type == ActionData.ActionType.EQUIPPABLE
+	return true
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	drop_collectable(data["ID"])
+	inventory_full = not has_free_slot()
 
 
 # ----------------------
@@ -88,14 +95,18 @@ func _on_slot_right_click(slot_id: int) -> void:
 		return
 
 	context_menu.clear()
+	print("_on_slot_right_click", slot.slot_data.action_data.action_type)
 	match _get_item_action_type(slot.slot_data):
 		ActionData.ActionType.CONSUMABLE:
+			print("CONSUMABLE")
 			context_menu.add_item("Use", 0)
 			context_menu.add_item("Drop", 1)
 		ActionData.ActionType.EQUIPPABLE:
+			print("EQUIPPABLE")
 			context_menu.add_item("Equip", 0)
 			context_menu.add_item("Drop", 1)
 		ActionData.ActionType.INSPECTABLE:
+			print("INSPECTABLE")
 			context_menu.add_item("View", 0)
 			context_menu.add_item("Drop", 1)
 
@@ -244,8 +255,9 @@ func view_inspectable(slot_id: int) -> void:
 	interaction_controller.on_note_inspected(instance)
 	slot.fill_slot(null)
 
-func _get_item_action_type(item: ItemData) -> int:
-	if not item or not item.item_model_prefab:	
-		return -1
-		
-	return item.action_data.action_type	
+func _get_item_action_type(item_data: ItemData) -> ActionData.ActionType:
+	if not item_data or not item_data.item_model_prefab:	
+		return ActionData.ActionType.INVALID
+	
+	print("_get_item_action_type", item_data.action_data.action_type)
+	return item_data.action_data.action_type

@@ -18,7 +18,7 @@
 height = 1.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
-radius = 3.0
+radius = 6.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hg6s5"]
 
@@ -51,7 +51,6 @@ shape = SubResource("CapsuleShape3D_oul6g")
 target_position = Vector3(0, 2, 0)
 
 [node name="InteractableCheck" type="Area3D" parent="."]
-visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractableCheck"]
 shape = SubResource("SphereShape3D_qjkh3")

@@ -20,6 +20,8 @@ Use this class for standard hinged doors that open on a pivot.
 ## Defines the point where the door will rotate around
 @export var pivot_point: Node3D
 
+@export var unlock_key_name: String
+
 ## True if the door is locked, false otherwise
 @export var is_locked: bool = false
 
@@ -193,8 +195,8 @@ func _play_door_shut_sound(volume_db: float = 0.0) -> void:
 	shut_audio_player.volume_db = volume_db
 	shut_audio_player.play()
 
-func use_item(action: ActionData) -> bool:
-	if action.item_name == "special_key":
+func use_item(item_data: ItemData) -> bool:
+	if item_data.item_name == unlock_key_name:
 		is_locked = false
 		return true
 	else:

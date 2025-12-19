@@ -1,9 +1,9 @@
-[gd_scene load_steps=12 format=4 uid="uid://33x7q472wub8"]
+[gd_scene load_steps=12 format=4 uid="uid://c8t8rfvwj7ssd"]
 
-[ext_resource type="PackedScene" uid="uid://cii67lpoq3qiw" path="res://interactions/CollectableInteraction/EquippableInteraction/equippable_interaction.tscn" id="1_7bgb1"]
-[ext_resource type="Script" uid="uid://crd8v7n43w1nk" path="res://inventory/actions/equippable_action.gd" id="2_0e8it"]
-[ext_resource type="AudioStream" uid="uid://dkfquhn7txsbi" path="res://assets/sound_effects/handleCoins2.ogg" id="2_shf6t"]
-[ext_resource type="Script" uid="uid://bwybjlc36d0qn" path="res://inventory/item_data.gd" id="4_7bgb1"]
+[ext_resource type="PackedScene" uid="uid://cii67lpoq3qiw" path="res://interactions/CollectableInteraction/EquippableInteraction/equippable_interaction.tscn" id="1_5um21"]
+[ext_resource type="AudioStream" uid="uid://dkfquhn7txsbi" path="res://assets/sound_effects/handleCoins2.ogg" id="2_4yce4"]
+[ext_resource type="Script" uid="uid://crd8v7n43w1nk" path="res://inventory/actions/equippable_action.gd" id="3_ljpg1"]
+[ext_resource type="Script" uid="uid://bwybjlc36d0qn" path="res://inventory/item_data.gd" id="4_xcp8e"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tvkye"]
 resource_name = "Golden"
@@ -52,14 +52,14 @@ shadow_mesh = SubResource("ArrayMesh_bwx8t")
 size = Vector3(0.44458008, 0.113342285, 1.0334473)
 
 [sub_resource type="Resource" id="Resource_hwui0"]
-script = ExtResource("2_0e8it")
+script = ExtResource("3_ljpg1")
 metadata/_custom_type_script = "uid://crd8v7n43w1nk"
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_7bgb1"]
 
 [sub_resource type="Resource" id="Resource_d0y2h"]
-script = ExtResource("4_7bgb1")
-item_name = "special_key"
+script = ExtResource("4_xcp8e")
+item_name = "super_key"
 item_icon = SubResource("PlaceholderTexture2D_7bgb1")
 action_data = SubResource("Resource_hwui0")
 metadata/_custom_type_script = "uid://bwybjlc36d0qn"
@@ -75,6 +75,6 @@ skeleton = NodePath("")
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.0015258789, -0.006011963, -0.015177436)
 shape = SubResource("BoxShape3D_5jnhb")
 
-[node name="EquippableInteraction" parent="." instance=ExtResource("1_7bgb1")]
-collect_sound_effect = ExtResource("2_shf6t")
+[node name="EquippableInteraction" parent="." instance=ExtResource("1_5um21")]
+collect_sound_effect = ExtResource("2_4yce4")
 item_data = SubResource("Resource_d0y2h")

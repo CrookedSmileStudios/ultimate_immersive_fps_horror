@@ -53,5 +53,5 @@ func notify_nodes(percentage: float) -> void:
 		if node and node.has_method("execute"):
 			node.call("execute", percentage)
 			
-func use_item(action: ActionData) -> bool:
+func use_item(_item_data: ItemData) -> bool:
 	return false
