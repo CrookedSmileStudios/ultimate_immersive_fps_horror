@@ -13,7 +13,8 @@ extends Node
 @onready var interactable_check: Area3D = $"../InteractableCheck"
 @onready var note_overlay: Control = %NoteOverlay
 @onready var note_content: RichTextLabel = %NoteContent
-@onready var inventory_controller: InventoryController = %InventoryController/InventoryUI
+@onready var inventory_controller: InventoryController = %InventoryController/CanvasLayer/InventoryUI
+@onready var interaction_textbox: Label = %InteractionTextbox
 @onready var outline_material: Material = preload("res://materials/item_highlighter.tres")
 
 signal invent_on_item_collected(item)
@@ -91,10 +92,13 @@ func _process(_delta: float) -> void:
 					current_object = null
 					_unfocus()
 				elif Input.is_action_pressed("primary"):
+					if interaction_component is InspectableInteraction and note != null:
+						return
 					if not interaction_component is CollectableInteraction or not inventory_controller.inventory_full:
 						interaction_component.interact()
 					else:
 						if not interact_failure_player.playing:
+							_show_interaction_text("Inventory Full...", 1.0)
 							interact_failure_player.play()
 				else:
 					interaction_component.post_interact()
@@ -252,9 +256,10 @@ func _on_note_collected():
 		audio_player.stream = note_interaction_component.put_away_sound_effect
 		add_child(audio_player)
 		audio_player.play()
-		note.visible = false	
-		await audio_player.finished
+		note.visible = false
+		note = null
 		_add_item_to_inventory(note_interaction_component.item_data)
+		await audio_player.finished
 
 func _add_item_to_inventory(item_data: ItemData):
 	if item_data != null:
@@ -288,12 +293,13 @@ func _use_equipped_item() -> void:
 				equipped_item.queue_free()
 				equipped_item = null
 				item_equipped = false
-			print("item used")
+			_show_interaction_text(equipped_item_ic.item_data.action_data.success_text, 1.0)	
 			interact_success_player.play()
 			return
 		else:
-			# this item can not be used on this interaction
-			print("nothing interesting happens")
+			_show_interaction_text("Nothing interesting happens...", 1.0)
+	else:
+		_show_interaction_text("Nothing to be used on...", 1.0)
 	interact_failure_player.play()
 	inventory_controller.pickup_item(equipped_item_ic.item_data)
 	equipped_item.queue_free()
@@ -308,3 +314,9 @@ func find_interaction_component(node: Node) -> AbstractInteraction:
 				return child
 		node = node.get_parent()
 	return null
+
+func _show_interaction_text(text: String, duration: float = 2.0) -> void:
+	interaction_textbox.text = text
+	interaction_textbox.visible = true
+	await get_tree().create_timer(duration).timeout
+	interaction_textbox.visible = false

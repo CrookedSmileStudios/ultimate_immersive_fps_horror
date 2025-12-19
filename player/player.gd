@@ -72,7 +72,7 @@ var target_lean: float = 0.0                        # -1 = left, 1 = right, 0 = 
 var current_lean: float = 0.0
 
 # Inventory Vars
-@onready var inventory_controller: InventoryController = %InventoryController/InventoryUI
+@onready var inventory_controller: InventoryController = %InventoryController/CanvasLayer/InventoryUI
 @onready var interaction_raycast: RayCast3D = %InteractionRaycast
 
 

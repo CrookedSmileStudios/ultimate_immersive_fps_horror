@@ -1,10 +1,10 @@
 extends Control
 class_name InventoryController
 
-@onready var player_camera: Camera3D = $"../../Head/Eyes/Camera3D"
-@onready var hand: Marker3D = $"../../Head/Eyes/Camera3D/Hand"
-@onready var interaction_controller: Node = $"../../InteractionController"
-@onready var sanity_controller: Node = $"../../SanityController"
+@onready var player_camera: Camera3D = $"../../../Head/Eyes/Camera3D"
+@onready var hand: Marker3D = $"../../../Head/Eyes/Camera3D/Hand"
+@onready var interaction_controller: Node = $"../../../InteractionController"
+@onready var sanity_controller: Node = $"../../../SanityController"
 @onready var context_menu: PopupMenu = PopupMenu.new()
 
 @export var item_slots_count:int = 20
@@ -154,6 +154,7 @@ func use_collectable(slot_id: int) -> void:
 		"sanity":
 			sanity_controller.add_sanity(data.modifier_value)
 
+	inventory_full = not has_free_slot()
 	slot.fill_slot(null)
 
 func drop_collectable(slot_id: int) -> void:
@@ -232,6 +233,7 @@ func drop_collectable(slot_id: int) -> void:
 	swap_slot_player.play()
 
 	slot.fill_slot(null)
+	inventory_full = not has_free_slot()
 
 
 

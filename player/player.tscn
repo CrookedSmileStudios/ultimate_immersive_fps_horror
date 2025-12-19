@@ -132,62 +132,88 @@ mesh = SubResource("SphereMesh_g6k8r")
 [node name="GUI" type="Node" parent="."]
 
 [node name="ReticleLayer" type="CanvasLayer" parent="GUI"]
+layer = 3
 
-[node name="Control" type="Control" parent="GUI/ReticleLayer"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="CenterContainer" type="CenterContainer" parent="GUI/ReticleLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="DefaultReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+[node name="DefaultReticle" type="TextureRect" parent="GUI/ReticleLayer/CenterContainer"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
 texture = ExtResource("2_g1dw6")
 stretch_mode = 3
 
-[node name="HighlightReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+[node name="HighlightReticle" type="TextureRect" parent="GUI/ReticleLayer/CenterContainer"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
 texture = ExtResource("3_qjkh3")
 stretch_mode = 3
 
-[node name="InteractingReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+[node name="InteractingReticle" type="TextureRect" parent="GUI/ReticleLayer/CenterContainer"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
 texture = ExtResource("4_g6k8r")
 stretch_mode = 3
 
-[node name="UseReticle" type="TextureRect" parent="GUI/ReticleLayer/Control"]
+[node name="UseReticle" type="TextureRect" parent="GUI/ReticleLayer/CenterContainer"]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 2
 texture = ExtResource("5_2ieo8")
 stretch_mode = 3
 
-[node name="Debug" type="Label" parent="GUI/ReticleLayer/Control"]
+[node name="Debug" type="Label" parent="GUI/ReticleLayer"]
 unique_name_in_owner = true
-layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="Debug2" type="Label" parent="GUI/ReticleLayer/Control"]
+[node name="Debug2" type="Label" parent="GUI/ReticleLayer"]
 unique_name_in_owner = true
-layout_mode = 0
 offset_left = 174.355
-offset_right = 214.3549
-offset_bottom = 23.000006
+offset_right = 214.35487
+offset_bottom = 23.0
+
+[node name="InteractionText" type="Control" parent="GUI/ReticleLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUI/ReticleLayer/InteractionText"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 33.26001
+offset_bottom = 33.26001
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InteractionTextbox" type="Label" parent="GUI/ReticleLayer/InteractionText/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Nothing Interesting Happens"
+horizontal_alignment = 1
 
 [node name="NoteLayer" type="CanvasLayer" parent="GUI"]
+layer = 2
 
 [node name="NoteOverlay" type="Control" parent="GUI/NoteLayer"]
 unique_name_in_owner = true
