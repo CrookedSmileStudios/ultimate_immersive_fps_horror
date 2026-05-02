@@ -1,3 +1,7 @@
+As of May 1st I have deprecated this project in favor of this one:
+https://github.com/CrookedSmileStudios/godot-immersive-first-person-toolkit-dev/tree/main
+
+
 # Immersive Simulation Controller for FPS Horror in Godot 
 Learn how to build an immersive horror FPS controller in Godot from scratch. Perfect for beginners or indie devs making Amnesia-style games.
 
